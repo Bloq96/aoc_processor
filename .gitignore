@@ -1,0 +1,8 @@
+db/
+incremental_db/
+modelsim_output_files/
+output_files/
+*.bak
+*.qpf
+*.qsf
+*.qws
