@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 
 entity single_cycle_controller is
     port(
-        instruction : in std_logic_vector(31 downto 0)
+        instruction : in std_logic_vector(31 downto 0);
         alu_selector : out std_logic_vector(5 downto 0);
         beq : out std_logic;
         bne : out std_logic;
@@ -335,11 +335,12 @@ single_cycle_controller is
         alu_selector <= instruction(5 downto 0) when
                         (w_r_instruction = '1') else
                         mux_0;
-        mux_0 <= mux_2 when ((not(instruction(5)) and instruction(3))
-                 = '1') else
-                 mus_1;
-        mux_1 <= "100000" when (instruction(1) = '1') else
+        mux_0 <= mux_2 when ((not(instruction(31)) and
+                 instruction(29)) = '1') else
+                 mux_1;
+        mux_1 <= "100000" when (instruction(27) = '1') else
                  "100010";
-        mux_2 <= "000000" when (instruction(1) = '1') else
+        mux_2 <= "000000" when (instruction(27) = '1') else
                  "100101";
+        r_instruction <= w_r_instruction;
 end architecture;
