@@ -5,11 +5,10 @@ entity single_cycle_controller is
     port(
         instruction : in std_logic_vector(31 downto 0);
         alu_selector : out std_logic_vector(5 downto 0);
-        beq : out std_logic;
-        bne : out std_logic;
         epc_we : out std_logic;
         has_shamt : out std_logic;
         hi_we : out std_logic;
+        i_instruction : out std_logic_vector(1 downto 0);
         jump : out std_logic;
         lo_we : out std_logic;
         memd_we : out std_logic;
@@ -32,11 +31,11 @@ single_cycle_controller is
             begin
                 case instruction(31 downto 26) is
                     when "000001" =>    -- nop
-                        beq <= '0';
-                        bne <= '0'; 
                         epc_we <= '0';
                         has_shamt <= '0'; 
                         hi_we <= '0'; 
+                        i_instruction <= "00"; 
+                        pc_source <= "000"; 
                         jump <= '1'; 
                         lo_we <= '0'; 
                         memd_we <= '0'; 
@@ -46,11 +45,10 @@ single_cycle_controller is
                         rd_source <= "000"; 
                         register_bank_we <= '0'; 
                     when "000010" =>    -- j
-                        beq <= '0';
-                        bne <= '0'; 
                         epc_we <= '0';
                         has_shamt <= '0'; 
                         hi_we <= '0'; 
+                        i_instruction <= "00"; 
                         jump <= '1'; 
                         lo_we <= '0'; 
                         memd_we <= '0'; 
@@ -60,11 +58,10 @@ single_cycle_controller is
                         rd_source <= "000"; 
                         register_bank_we <= '0'; 
                     when "000011" =>    -- jal
-                        beq <= '0';
-                        bne <= '0'; 
                         epc_we <= '0';
                         has_shamt <= '0'; 
                         hi_we <= '0'; 
+                        i_instruction <= "00"; 
                         jump <= '1'; 
                         lo_we <= '0'; 
                         memd_we <= '0'; 
@@ -74,11 +71,10 @@ single_cycle_controller is
                         rd_source <= "111"; 
                         register_bank_we <= '1'; 
                     when "000100" =>    -- beq
-                        beq <= '1';
-                        bne <= '0'; 
                         epc_we <= '0';
                         has_shamt <= '0'; 
                         hi_we <= '0'; 
+                        i_instruction <= "01"; 
                         jump <= '0'; 
                         lo_we <= '0'; 
                         memd_we <= '0'; 
@@ -88,11 +84,10 @@ single_cycle_controller is
                         rd_source <= "000"; 
                         register_bank_we <= '0'; 
                     when "000101" =>    -- bne
-                        beq <= '0';
-                        bne <= '1'; 
                         epc_we <= '0';
                         has_shamt <= '0'; 
                         hi_we <= '0'; 
+                        i_instruction <= "10"; 
                         jump <= '0'; 
                         lo_we <= '0'; 
                         memd_we <= '0'; 
@@ -102,11 +97,10 @@ single_cycle_controller is
                         rd_source <= "000"; 
                         register_bank_we <= '0'; 
                     when "001101" =>    -- ori
-                        beq <= '0';
-                        bne <= '0'; 
                         epc_we <= '0';
                         has_shamt <= '0'; 
                         hi_we <= '0'; 
+                        i_instruction <= "11"; 
                         jump <= '0'; 
                         lo_we <= '0'; 
                         memd_we <= '0'; 
@@ -116,11 +110,10 @@ single_cycle_controller is
                         rd_source <= "000"; 
                         register_bank_we <= '1'; 
                     when "001111" =>    -- lui
-                        beq <= '0';
-                        bne <= '0'; 
                         epc_we <= '0';
                         has_shamt <= '0'; 
                         hi_we <= '0'; 
+                        i_instruction <= "00"; 
                         jump <= '0'; 
                         lo_we <= '0'; 
                         memd_we <= '0'; 
@@ -130,11 +123,10 @@ single_cycle_controller is
                         rd_source <= "101"; 
                         register_bank_we <= '1'; 
                     when "100011" =>    -- lw
-                        beq <= '0';
-                        bne <= '0'; 
                         epc_we <= '0';
                         has_shamt <= '0'; 
                         hi_we <= '0'; 
+                        i_instruction <= "00"; 
                         jump <= '0'; 
                         lo_we <= '0'; 
                         memd_we <= '0'; 
@@ -144,11 +136,10 @@ single_cycle_controller is
                         rd_source <= "110"; 
                         register_bank_we <= '1'; 
                     when "101011" =>    -- sw
-                        beq <= '0';
-                        bne <= '0'; 
                         epc_we <= '0';
                         has_shamt <= '0'; 
                         hi_we <= '0'; 
+                        i_instruction <= "00"; 
                         jump <= '0'; 
                         lo_we <= '0'; 
                         memd_we <= '1'; 
@@ -160,11 +151,10 @@ single_cycle_controller is
                     when others =>
                         case instruction(5 downto 0) is
                             when "000000" =>    -- sll
-                                beq <= '0';
-                                bne <= '0'; 
                                 epc_we <= '0';
                                 has_shamt <= '1'; 
                                 hi_we <= '0'; 
+                                i_instruction <= "00"; 
                                 jump <= '0'; 
                                 lo_we <= '0'; 
                                 memd_we <= '0'; 
@@ -174,11 +164,10 @@ single_cycle_controller is
                                 rd_source <= "000"; 
                                 register_bank_we <= '1'; 
                             when "000011" =>    -- sra
-                                beq <= '0';
-                                bne <= '0'; 
                                 epc_we <= '0';
                                 has_shamt <= '1'; 
                                 hi_we <= '0'; 
+                                i_instruction <= "00"; 
                                 jump <= '0'; 
                                 lo_we <= '0'; 
                                 memd_we <= '0'; 
@@ -188,11 +177,10 @@ single_cycle_controller is
                                 rd_source <= "000"; 
                                 register_bank_we <= '1'; 
                             when "001000" =>    -- jr
-                                beq <= '0';
-                                bne <= '0'; 
                                 epc_we <= '0';
                                 has_shamt <= '0'; 
                                 hi_we <= '0'; 
+                                i_instruction <= "00"; 
                                 jump <= '0'; 
                                 lo_we <= '0'; 
                                 memd_we <= '0'; 
@@ -202,11 +190,10 @@ single_cycle_controller is
                                 rd_source <= "000"; 
                                 register_bank_we <= '0'; 
                             when "001001" =>    -- jalr
-                                beq <= '0';
-                                bne <= '0'; 
                                 epc_we <= '0';
                                 has_shamt <= '0'; 
                                 hi_we <= '0'; 
+                                i_instruction <= "00"; 
                                 jump <= '0'; 
                                 lo_we <= '0'; 
                                 memd_we <= '0'; 
@@ -216,11 +203,10 @@ single_cycle_controller is
                                 rd_source <= "111"; 
                                 register_bank_we <= '1'; 
                             when "001100" =>    -- syscall
-                                beq <= '0';
-                                bne <= '0'; 
                                 epc_we <= '1';
                                 has_shamt <= '0'; 
                                 hi_we <= '0'; 
+                                i_instruction <= "00"; 
                                 jump <= '0'; 
                                 lo_we <= '0'; 
                                 memd_we <= '0'; 
@@ -230,11 +216,10 @@ single_cycle_controller is
                                 rd_source <= "000"; 
                                 register_bank_we <= '0'; 
                             when "001101" =>    -- break
-                                beq <= '0';
-                                bne <= '0'; 
                                 epc_we <= '0';
                                 has_shamt <= '0'; 
                                 hi_we <= '0'; 
+                                i_instruction <= "00"; 
                                 jump <= '0'; 
                                 lo_we <= '0'; 
                                 memd_we <= '0'; 
@@ -244,11 +229,10 @@ single_cycle_controller is
                                 rd_source <= "000"; 
                                 register_bank_we <= '0'; 
                             when "010000" =>    -- mfhi
-                                beq <= '0';
-                                bne <= '0'; 
                                 epc_we <= '0';
                                 has_shamt <= '0'; 
                                 hi_we <= '0'; 
+                                i_instruction <= "00"; 
                                 jump <= '0'; 
                                 lo_we <= '0'; 
                                 memd_we <= '0'; 
@@ -258,11 +242,10 @@ single_cycle_controller is
                                 rd_source <= "010"; 
                                 register_bank_we <= '1'; 
                             when "010010" =>    -- mflo
-                                beq <= '0';
-                                bne <= '0'; 
                                 epc_we <= '0';
                                 has_shamt <= '0'; 
                                 hi_we <= '0'; 
+                                i_instruction <= "00"; 
                                 jump <= '0'; 
                                 lo_we <= '0'; 
                                 memd_we <= '0'; 
@@ -272,11 +255,10 @@ single_cycle_controller is
                                 rd_source <= "011"; 
                                 register_bank_we <= '1'; 
                             when "011000" =>    -- mult
-                                beq <= '0';
-                                bne <= '0'; 
                                 epc_we <= '0';
                                 has_shamt <= '0'; 
                                 hi_we <= '1'; 
+                                i_instruction <= "00"; 
                                 jump <= '0'; 
                                 lo_we <= '1'; 
                                 memd_we <= '0'; 
@@ -286,11 +268,10 @@ single_cycle_controller is
                                 rd_source <= "000"; 
                                 register_bank_we <= '0'; 
                             when "011010" =>    -- div
-                                beq <= '0';
-                                bne <= '0'; 
                                 epc_we <= '0';
                                 has_shamt <= '0'; 
                                 hi_we <= '1'; 
+                                i_instruction <= "00"; 
                                 jump <= '0'; 
                                 lo_we <= '1'; 
                                 memd_we <= '0'; 
@@ -300,11 +281,10 @@ single_cycle_controller is
                                 rd_source <= "000"; 
                                 register_bank_we <= '0'; 
                             when "101010" =>    -- slt
-                                beq <= '0';
-                                bne <= '0'; 
                                 epc_we <= '0';
                                 has_shamt <= '0'; 
                                 hi_we <= '0'; 
+                                i_instruction <= "00"; 
                                 jump <= '0'; 
                                 lo_we <= '0'; 
                                 memd_we <= '0'; 
@@ -315,11 +295,10 @@ single_cycle_controller is
                                 register_bank_we <= '1';
                             -- sllv,srav,add,sub,and,or,xor,nor --
                             when others =>
-                                beq <= '0';
-                                bne <= '0'; 
                                 epc_we <= '0';
                                 has_shamt <= '0'; 
                                 hi_we <= '0'; 
+                                i_instruction <= "00"; 
                                 jump <= '0'; 
                                 lo_we <= '0'; 
                                 memd_we <= '0'; 

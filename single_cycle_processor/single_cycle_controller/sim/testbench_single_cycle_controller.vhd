@@ -8,11 +8,10 @@ architecture dataflow_testbench_single_cycle_controller of
 testbench_single_cycle_controller is
     signal w_instruction : std_logic_vector(31 downto 0);
     signal w_alu_selector : std_logic_vector(5 downto 0);
-    signal w_beq : std_logic;
-    signal w_bne : std_logic;
     signal w_epc_we : std_logic;
     signal w_has_shamt : std_logic;
     signal w_hi_we : std_logic;
+    signal w_i_instruction : std_logic_vector(1 downto 0);
     signal w_jump : std_logic;
     signal w_lo_we : std_logic;
     signal w_memd_we : std_logic;
@@ -26,11 +25,10 @@ testbench_single_cycle_controller is
         port(
             instruction : in std_logic_vector(31 downto 0);
             alu_selector : out std_logic_vector(5 downto 0);
-            beq : out std_logic;
-            bne : out std_logic;
             epc_we : out std_logic;
             has_shamt : out std_logic;
             hi_we : out std_logic;
+            i_instruction : out std_logic_vector(1 downto 0);
             jump : out std_logic;
             lo_we : out std_logic;
             memd_we : out std_logic;
@@ -46,11 +44,10 @@ testbench_single_cycle_controller is
             port map(
                 instruction => w_instruction,
                 alu_selector => w_alu_selector,
-                beq => w_beq,
-                bne => w_bne,
                 epc_we => w_epc_we,
                 has_shamt => w_has_shamt,
                 hi_we => w_hi_we,
+                i_instruction => w_i_instruction,
                 jump => w_jump,
                 lo_we => w_lo_we,
                 memd_we => w_memd_we,

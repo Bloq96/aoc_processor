@@ -20,7 +20,7 @@ package GENERIC_COMPONENTS is
             0);
             sai_Rt_dado : out std_logic_vector((largura_dado - 1) downto
             0);
-            clk, WE     : in std_logic);
+            clk,WE,rst  : in std_logic);
     end component;
     component deslocador is
         generic (
