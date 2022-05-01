@@ -19,7 +19,7 @@ testbench_single_cycle_controller is
     signal w_pc_we : std_logic;
     signal w_r_instruction : std_logic;
     signal w_rd_source : std_logic_vector(2 downto 0);
-    signal w_register_bank_we : std_logic;
+    signal w_register_file_we : std_logic;
 	
 	component single_cycle_controller is
         port(
@@ -36,7 +36,7 @@ testbench_single_cycle_controller is
             pc_we : out std_logic;
             r_instruction : out std_logic;
             rd_source : out std_logic_vector(2 downto 0);
-            register_bank_we : out std_logic);
+            register_file_we : out std_logic);
     end component;
 
     begin
@@ -55,7 +55,7 @@ testbench_single_cycle_controller is
                 pc_we => w_pc_we,
                 r_instruction => w_r_instruction,
                 rd_source => w_rd_source,
-                register_bank_we => w_register_bank_we);
+                register_file_we => w_register_file_we);
 	
         w_instruction(31 downto 26) <= "000000",
                                        "000100" after 3800001 ps,

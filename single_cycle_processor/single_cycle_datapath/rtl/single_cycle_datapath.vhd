@@ -24,9 +24,8 @@ entity single_cycle_datapath is
         jump : in std_logic;
         lo_we : in std_logic;
         memd_we : in std_logic;
-        ori : in std_logic;
-        pc_we : in std_logic;
         pc_source : in std_logic_vector(2 downto 0);
+        pc_we : in std_logic;
         r_instruction : in std_logic;
         rd_source : in std_logic_vector(2 downto 0);
         register_file_we : in std_logic;
@@ -185,9 +184,11 @@ is
             generic map(
                 largura_dado => 32,
                 largura_ende => 5,
-                reset_data_0 => 832,
-                reset_data_1 => 3072,
-                reset_data_2 => 3072,
+                reset_data_0 => ((13*MEMI_NUMBER_OF_WORDS)/4),
+                reset_data_1 => (4*(MEMD_NUMBER_OF_WORDS+
+                MEMI_NUMBER_OF_WORDS)),
+                reset_data_2 => (4*(MEMD_NUMBER_OF_WORDS+
+                MEMI_NUMBER_OF_WORDS)),
                 reset_data_3 => 0)
             port map(
                 clk => clk,
