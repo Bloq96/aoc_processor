@@ -22,7 +22,6 @@ single_cycle_processor is
     signal w_lo_we : std_logic;
     signal w_memd_we : std_logic;
     signal w_pc_source : std_logic_vector(2 downto 0);
-    signal w_pc_we : std_logic;
     signal w_r_instruction : std_logic;
     signal w_rd_source : std_logic_vector(2 downto 0);
     signal w_register_file_we : std_logic;
@@ -40,15 +39,14 @@ single_cycle_processor is
                 lo_we => w_lo_we,
                 memd_we => w_memd_we,
                 pc_source => w_pc_source,
-                pc_we => w_pc_we,
                 r_instruction => w_r_instruction,
                 rd_source => w_rd_source,
                 register_file_we => w_register_file_we);
 
         SCD : single_cycle_datapath
             generic map(
-                MEMD_NUMBER_OF_WORDS => 576,
-                MEMI_NUMBER_OF_WORDS => 192)
+                MEMD_NUMBER_OF_WORDS => 1024,
+                MEMI_NUMBER_OF_WORDS => 256)
             port map(
                 alu_selector => w_alu_selector,
                 clk => clk,
@@ -60,7 +58,6 @@ single_cycle_processor is
                 lo_we => w_lo_we,
                 memd_we => w_memd_we,
                 pc_source => w_pc_source,
-                pc_we => w_pc_we,
                 r_instruction => w_r_instruction,
                 rd_source => w_rd_source,
                 register_file_we => w_register_file_we,

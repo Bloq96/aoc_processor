@@ -4,27 +4,29 @@ use ieee.numeric_std.all;
 
 package GENERIC_COMPONENTS is
     component banco_registradores is
-        generic (
-            largura_dado : natural;
-            largura_ende : natural;
-            reset_data_0 : natural;
-            reset_data_1 : natural;
-            reset_data_2 : natural;
-            reset_data_3 : natural);
+     -- generic (
+         -- largura_dado : natural range 32 to 32;
+         -- largura_ende : natural range 2 to 128;
+         -- reset_data_0 : integer range -2147483647 to 2147483647;
+         -- reset_data_1 : integer range -2147483647 to 2147483647;
+         -- reset_data_2 : integer range -2147483647 to 2147483647;
+         -- reset_data_3 : integer range -2147483647 to 2147483647
+     -- );
         port (
-            ent_Rs_ende : in std_logic_vector((largura_ende - 1) downto
-            0);
-            ent_Rt_ende : in std_logic_vector((largura_ende - 1) downto
-            0);
-            ent_Rd_ende : in std_logic_vector((largura_ende - 1) downto
-            0);
-            ent_Rd_dado : in std_logic_vector((largura_dado - 1) downto
-            0);
-            sai_Rs_dado : out std_logic_vector((largura_dado - 1) downto
-            0);
-            sai_Rt_dado : out std_logic_vector((largura_dado - 1) downto
-            0);
-            clk,WE,rst  : in std_logic);
+         -- ent_Rs_ende : in std_logic_vector((largura_ende - 1) downto 0);
+         -- ent_Rt_ende : in std_logic_vector((largura_ende - 1) downto 0);
+         -- ent_Rd_ende : in std_logic_vector((largura_ende - 1) downto 0);
+         -- ent_Rd_dado : in std_logic_vector((largura_dado - 1) downto 0);
+         -- sai_Rs_dado : out std_logic_vector((largura_dado - 1) downto 0);
+         -- sai_Rt_dado : out std_logic_vector((largura_dado - 1) downto 0);
+            ent_Rs_ende : in std_logic_vector(4 downto 0);
+            ent_Rt_ende : in std_logic_vector(4 downto 0);
+            ent_Rd_ende : in std_logic_vector(4 downto 0);
+            ent_Rd_dado : in std_logic_vector(31 downto 0);
+            sai_Rs_dado : out std_logic_vector(31 downto 0);
+            sai_Rt_dado : out std_logic_vector(31 downto 0);
+            clk,WE,rst  : in std_logic 
+        );
     end component;
     component deslocador is
         generic (
@@ -69,14 +71,15 @@ package GENERIC_COMPONENTS is
             MD_ADDR_WIDTH   : natural
         );
         port (
-            clk                 : in std_logic;
-            mem_write, mem_read : in std_logic;
-            write_data_mem      : in std_logic_vector(
-            MD_DATA_WIDTH - 1 downto 0);
-            address_mem          : in std_logic_vector(
-            MD_ADDR_WIDTH - 1 downto 0);
-            read_data_mem       : out std_logic_vector(
-            MD_DATA_WIDTH - 1 downto 0)
+            clk              : in std_logic;
+         -- mem_read         : in std_logic; --sinais do controlador
+            mem_write        : in std_logic; --sinais do controlador 
+            write_data_mem   : in std_logic_vector(MD_DATA_WIDTH - 1
+            downto 0);
+            address_mem      : in std_logic_vector(MD_ADDR_WIDTH - 1
+            downto 0);
+            read_data_mem    : out std_logic_vector(MD_DATA_WIDTH - 1
+            downto 0)
         );
     end component;
     component memi is
@@ -85,8 +88,6 @@ package GENERIC_COMPONENTS is
             MI_ADDR_WIDTH : natural
         );
         port (
-            clk       : in std_logic;
-            reset     : in std_logic;
             Endereco  : in std_logic_vector(MI_ADDR_WIDTH - 1
             downto 0);
             Instrucao : out std_logic_vector(INSTR_WIDTH - 1

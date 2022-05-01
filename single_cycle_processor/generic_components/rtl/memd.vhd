@@ -13,11 +13,12 @@ entity memd is
         MD_ADDR_WIDTH   : natural  -- tamanho do endereco da memoria de dados em bits
     );
     port (
-        clk                 : in std_logic;
-        mem_write, mem_read : in std_logic; --sinais do controlador
-        write_data_mem      : in std_logic_vector(MD_DATA_WIDTH - 1 downto 0);
-        address_mem          : in std_logic_vector(MD_ADDR_WIDTH - 1 downto 0);
-        read_data_mem       : out std_logic_vector(MD_DATA_WIDTH - 1 downto 0)
+        clk              : in std_logic;
+     -- mem_read         : in std_logic; --sinais do controlador
+        mem_write        : in std_logic; --sinais do controlador
+        write_data_mem   : in std_logic_vector(MD_DATA_WIDTH - 1 downto 0);
+        address_mem      : in std_logic_vector(MD_ADDR_WIDTH - 1 downto 0);
+        read_data_mem    : out std_logic_vector(MD_DATA_WIDTH - 1 downto 0)
     );
 end memd;
 
@@ -36,5 +37,5 @@ begin
             end if;
         end if;
     end process;
-    read_data_mem <= ram(to_integer(unsigned(ram_addr))) when (mem_read = '1');
+    read_data_mem <= ram(to_integer(unsigned(ram_addr))); -- when (mem_read = '1');
 end comportamental;

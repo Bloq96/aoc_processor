@@ -13,7 +13,6 @@ entity single_cycle_controller is
         lo_we : out std_logic;
         memd_we : out std_logic;
         pc_source : out std_logic_vector(2 downto 0);
-        pc_we : out std_logic;
         r_instruction : out std_logic;
         rd_source : out std_logic_vector(2 downto 0);
         register_file_we : out std_logic);
@@ -40,7 +39,6 @@ single_cycle_controller is
                         lo_we <= '0'; 
                         memd_we <= '0'; 
                         pc_source <= "000"; 
-                        pc_we <= '0'; 
                         w_r_instruction <= '0'; 
                         rd_source <= "000"; 
                         register_file_we <= '0'; 
@@ -53,7 +51,6 @@ single_cycle_controller is
                         lo_we <= '0'; 
                         memd_we <= '0'; 
                         pc_source <= "101"; 
-                        pc_we <= '1'; 
                         w_r_instruction <= '0'; 
                         rd_source <= "000"; 
                         register_file_we <= '0'; 
@@ -66,7 +63,6 @@ single_cycle_controller is
                         lo_we <= '0'; 
                         memd_we <= '0'; 
                         pc_source <= "101"; 
-                        pc_we <= '1'; 
                         w_r_instruction <= '0'; 
                         rd_source <= "111"; 
                         register_file_we <= '1'; 
@@ -79,7 +75,6 @@ single_cycle_controller is
                         lo_we <= '0'; 
                         memd_we <= '0'; 
                         pc_source <= "100"; 
-                        pc_we <= '1'; 
                         w_r_instruction <= '0'; 
                         rd_source <= "000"; 
                         register_file_we <= '0'; 
@@ -92,7 +87,6 @@ single_cycle_controller is
                         lo_we <= '0'; 
                         memd_we <= '0'; 
                         pc_source <= "100"; 
-                        pc_we <= '1'; 
                         w_r_instruction <= '0'; 
                         rd_source <= "000"; 
                         register_file_we <= '0'; 
@@ -105,7 +99,6 @@ single_cycle_controller is
                         lo_we <= '0'; 
                         memd_we <= '0'; 
                         pc_source <= "000"; 
-                        pc_we <= '1'; 
                         w_r_instruction <= '0'; 
                         rd_source <= "000"; 
                         register_file_we <= '1'; 
@@ -118,7 +111,6 @@ single_cycle_controller is
                         lo_we <= '0'; 
                         memd_we <= '0'; 
                         pc_source <= "000"; 
-                        pc_we <= '1'; 
                         w_r_instruction <= '0'; 
                         rd_source <= "101"; 
                         register_file_we <= '1'; 
@@ -131,7 +123,6 @@ single_cycle_controller is
                         lo_we <= '0'; 
                         memd_we <= '0'; 
                         pc_source <= "000"; 
-                        pc_we <= '1'; 
                         w_r_instruction <= '0'; 
                         rd_source <= "110"; 
                         register_file_we <= '1'; 
@@ -144,7 +135,6 @@ single_cycle_controller is
                         lo_we <= '0'; 
                         memd_we <= '1'; 
                         pc_source <= "000"; 
-                        pc_we <= '1'; 
                         w_r_instruction <= '0'; 
                         rd_source <= "000"; 
                         register_file_we <= '0'; 
@@ -159,7 +149,6 @@ single_cycle_controller is
                                 lo_we <= '0'; 
                                 memd_we <= '0'; 
                                 pc_source <= "000"; 
-                                pc_we <= '1'; 
                                 w_r_instruction <= '1'; 
                                 rd_source <= "000"; 
                                 register_file_we <= '1'; 
@@ -172,7 +161,6 @@ single_cycle_controller is
                                 lo_we <= '0'; 
                                 memd_we <= '0'; 
                                 pc_source <= "000"; 
-                                pc_we <= '1'; 
                                 w_r_instruction <= '1'; 
                                 rd_source <= "000"; 
                                 register_file_we <= '1'; 
@@ -185,7 +173,6 @@ single_cycle_controller is
                                 lo_we <= '0'; 
                                 memd_we <= '0'; 
                                 pc_source <= "010"; 
-                                pc_we <= '1'; 
                                 w_r_instruction <= '1'; 
                                 rd_source <= "000"; 
                                 register_file_we <= '0'; 
@@ -198,7 +185,6 @@ single_cycle_controller is
                                 lo_we <= '0'; 
                                 memd_we <= '0'; 
                                 pc_source <= "010"; 
-                                pc_we <= '1'; 
                                 w_r_instruction <= '1'; 
                                 rd_source <= "111"; 
                                 register_file_we <= '1'; 
@@ -211,7 +197,6 @@ single_cycle_controller is
                                 lo_we <= '0'; 
                                 memd_we <= '0'; 
                                 pc_source <= "111"; 
-                                pc_we <= '1'; 
                                 w_r_instruction <= '1'; 
                                 rd_source <= "000"; 
                                 register_file_we <= '0'; 
@@ -224,7 +209,6 @@ single_cycle_controller is
                                 lo_we <= '0'; 
                                 memd_we <= '0'; 
                                 pc_source <= "011"; 
-                                pc_we <= '1'; 
                                 w_r_instruction <= '1'; 
                                 rd_source <= "000"; 
                                 register_file_we <= '0'; 
@@ -237,7 +221,6 @@ single_cycle_controller is
                                 lo_we <= '0'; 
                                 memd_we <= '0'; 
                                 pc_source <= "000"; 
-                                pc_we <= '1'; 
                                 w_r_instruction <= '1'; 
                                 rd_source <= "010"; 
                                 register_file_we <= '1'; 
@@ -250,7 +233,6 @@ single_cycle_controller is
                                 lo_we <= '0'; 
                                 memd_we <= '0'; 
                                 pc_source <= "000"; 
-                                pc_we <= '1'; 
                                 w_r_instruction <= '1'; 
                                 rd_source <= "011"; 
                                 register_file_we <= '1'; 
@@ -263,7 +245,6 @@ single_cycle_controller is
                                 lo_we <= '1'; 
                                 memd_we <= '0'; 
                                 pc_source <= "000"; 
-                                pc_we <= '1'; 
                                 w_r_instruction <= '1'; 
                                 rd_source <= "000"; 
                                 register_file_we <= '0'; 
@@ -276,7 +257,6 @@ single_cycle_controller is
                                 lo_we <= '1'; 
                                 memd_we <= '0'; 
                                 pc_source <= "000"; 
-                                pc_we <= '1'; 
                                 w_r_instruction <= '1'; 
                                 rd_source <= "000"; 
                                 register_file_we <= '0'; 
@@ -289,7 +269,6 @@ single_cycle_controller is
                                 lo_we <= '0'; 
                                 memd_we <= '0'; 
                                 pc_source <= "000"; 
-                                pc_we <= '1'; 
                                 w_r_instruction <= '1'; 
                                 rd_source <= "100"; 
                                 register_file_we <= '1';
@@ -303,7 +282,6 @@ single_cycle_controller is
                                 lo_we <= '0'; 
                                 memd_we <= '0'; 
                                 pc_source <= "000"; 
-                                pc_we <= '1'; 
                                 w_r_instruction <= '1'; 
                                 rd_source <= "000"; 
                                 register_file_we <= '1'; 

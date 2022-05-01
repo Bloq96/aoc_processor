@@ -25,7 +25,6 @@ entity single_cycle_datapath is
         lo_we : in std_logic;
         memd_we : in std_logic;
         pc_source : in std_logic_vector(2 downto 0);
-        pc_we : in std_logic;
         r_instruction : in std_logic;
         rd_source : in std_logic_vector(2 downto 0);
         register_file_we : in std_logic;
@@ -108,7 +107,6 @@ is
                 address_mem => memd_address, 
                 clk => clk,
                 mem_write => memd_we,
-                mem_read => not(memd_we),
                 write_data_mem => rt_output,
                 read_data_mem => data_value);
 
@@ -137,10 +135,8 @@ is
                 INSTR_WIDTH => 32,
                 MI_ADDR_WIDTH => ceil_log_2(MEMI_NUMBER_OF_WORDS))
             port map(
-                clk => clk,
                 Endereco => current_instruction(
                 (ceil_log_2(MEMI_NUMBER_OF_WORDS)+1) downto 2), 
-                reset => rst,
                 Instrucao => instruction_value);
 
         LO : registrador
@@ -169,7 +165,7 @@ is
                 clk => clk,
                 entrada_dados => pc_input,
                 reset => '0',
-                WE => pc_we,
+                WE => '1',
                 saida_dados => current_instruction);
 
         PCADD : somador
@@ -180,16 +176,16 @@ is
                 entrada_b => (2=>'1',others=>'0'),
                 saida => next_instruction);
 
-        REGB : banco_registradores
-            generic map(
-                largura_dado => 32,
-                largura_ende => 5,
-                reset_data_0 => ((13*MEMI_NUMBER_OF_WORDS)/4),
-                reset_data_1 => (4*(MEMD_NUMBER_OF_WORDS+
-                MEMI_NUMBER_OF_WORDS)),
-                reset_data_2 => (4*(MEMD_NUMBER_OF_WORDS+
-                MEMI_NUMBER_OF_WORDS)),
-                reset_data_3 => 0)
+        REGF : banco_registradores
+         -- generic map(
+             -- largura_dado => 32,
+             -- largura_ende => 5,
+             -- reset_data_0 => ((13*MEMI_NUMBER_OF_WORDS)/4),
+             -- reset_data_1 => (4*(MEMD_NUMBER_OF_WORDS+
+             -- MEMI_NUMBER_OF_WORDS)),
+             -- reset_data_2 => (4*(MEMD_NUMBER_OF_WORDS+
+             -- MEMI_NUMBER_OF_WORDS)),
+             -- reset_data_3 => 0)
             port map(
                 clk => clk,
                 ent_Rd_ende => write_address,

@@ -3,6 +3,7 @@ incremental_db/
 modelsim_output_files/
 output_files/
 *.bak
+*.ods#
 *.qpf
 *.qsf
 *.qws

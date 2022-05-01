@@ -15,7 +15,6 @@ package SINGLE_CYCLE_COMPONENTS is
             lo_we : out std_logic;
             memd_we : out std_logic;
             pc_source : out std_logic_vector(2 downto 0);
-            pc_we : out std_logic;
             r_instruction : out std_logic;
             rd_source : out std_logic_vector(2 downto 0);
             register_file_we : out std_logic);
@@ -36,7 +35,6 @@ component single_cycle_datapath is
             lo_we : in std_logic;
             memd_we : in std_logic;
             pc_source : in std_logic_vector(2 downto 0);
-            pc_we : in std_logic;
             r_instruction : in std_logic;
             rd_source : in std_logic_vector(2 downto 0);
             register_file_we : in std_logic;
