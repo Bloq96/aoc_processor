@@ -184,7 +184,11 @@ is
         REGB : banco_registradores
             generic map(
                 largura_dado => 32,
-                largura_ende => 5)
+                largura_ende => 5,
+                reset_data_0 => 832,
+                reset_data_1 => 3072,
+                reset_data_2 => 3072,
+                reset_data_3 => 0)
             port map(
                 clk => clk,
                 ent_Rd_ende => write_address,

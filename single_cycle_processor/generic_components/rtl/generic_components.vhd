@@ -6,7 +6,11 @@ package GENERIC_COMPONENTS is
     component banco_registradores is
         generic (
             largura_dado : natural;
-            largura_ende : natural);
+            largura_ende : natural;
+            reset_data_0 : natural;
+            reset_data_1 : natural;
+            reset_data_2 : natural;
+            reset_data_3 : natural);
         port (
             ent_Rs_ende : in std_logic_vector((largura_ende - 1) downto
             0);
