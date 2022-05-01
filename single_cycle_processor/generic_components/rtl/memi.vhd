@@ -21,15 +21,17 @@ end entity;
 architecture comportamental of memi is
 	type rom_type is array (0 to 2 ** MI_ADDR_WIDTH - 1) of std_logic_vector(INSTR_WIDTH - 1 downto 0);
 	signal rom : rom_type := (
-        64      => X"34080034", -- ori $t0, $0, 52
-        65      => X"34090022", -- ori $t1, $0, 34
-        66      => X"01098020", -- add $s0, $t0, $t1 
-        67      => X"3C08FFFF", -- lui $t0, 0xFFFF 
-        68      => X"3508FFFC", -- ori $t0, $t0, -4
-        69      => X"03A8E820", -- add $sp, $sp, $t0 
-        70      => X"AFB00000", -- sw $s0, 0($sp)
-        71      => X"04000000", -- nop
-        72      => X"08000047", -- jump 71
+        64      => X"00004020", -- add $t0, $0, $0
+        65      => X"34080034", -- ori $t0, $0, 52
+        66      => X"00004820", -- add $t1, $0, $0
+        67      => X"34090022", -- ori $t1, $0, 34
+        68      => X"01098020", -- add $s0, $t0, $t1 
+        69      => X"3C08FFFF", -- lui $t0, 0xFFFF 
+        70      => X"3508FFFC", -- ori $t0, $t0, -4
+        71      => X"03A8E820", -- add $sp, $sp, $t0 
+        72      => X"AFB00000", -- sw $s0, 0($sp)
+        73      => X"04000000", -- nop
+        74      => X"08000049", -- jump 73
         others  => X"04000000"  -- nop
     );
 begin
