@@ -48,17 +48,14 @@ if {[file isdirectory sim]} {
 	vsim -L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L cycloneii -L rtl_work -L work -voptargs=\"+acc\" -t 1ps sc_processor_testbench
 
 	add wave *
-    add wave /SCP/SCD/REGF/banco(2)
-    add wave /SCP/SCD/REGF/banco(4)
     add wave /SCP/SCD/REGF/banco(8)
     add wave /SCP/SCD/REGF/banco(9)
     add wave /SCP/SCD/REGF/banco(16)
     add wave /SCP/SCD/REGF/banco(29)
-    add wave /SCP/SCD/REGF/banco(30)
-    add wave /SCP/SCD/REGF/banco(31)
+    add wave /SCP/SCD/DMEM/ram(575)
     add wave /SCP/SCD/current_instruction
     add wave /SCP/SCD/instruction_value
 	view structure
 	view signals
-	run 15 us
+	run 5 us
 }

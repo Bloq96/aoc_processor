@@ -23,7 +23,8 @@ package SINGLE_CYCLE_COMPONENTS is
 component single_cycle_datapath is
         generic(
             MEMD_NUMBER_OF_WORDS : natural;
-            MEMI_NUMBER_OF_WORDS : natural);
+            MEMI_NUMBER_OF_WORDS : natural;
+            OUTPUT_ADDR : natural);
         port(
             alu_selector : in std_logic_vector(5 downto 0);
             clk : in std_logic;
@@ -39,7 +40,8 @@ component single_cycle_datapath is
             rd_source : in std_logic_vector(2 downto 0);
             register_file_we : in std_logic;
             rst : in std_logic;
-            instruction : out std_logic_vector(31 downto 0));
+            instruction : out std_logic_vector(31 downto 0);
+            output : out std_logic_vector(31 downto 0));
         end component;
 
 end package;

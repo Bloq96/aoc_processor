@@ -10,7 +10,8 @@ entity memd is
     generic (
         number_of_words : natural; -- número de words que a sua memória é capaz de armazenar
         MD_DATA_WIDTH   : natural; -- tamanho da palavra em bits
-        MD_ADDR_WIDTH   : natural  -- tamanho do endereco da memoria de dados em bits
+        MD_ADDR_WIDTH   : natural; -- tamanho do endereco da memoria de dados em bits
+        OUTPUT_ADDR     : natural -- tamanho do endereco da memoria de dados em bits
     );
     port (
         clk              : in std_logic;
@@ -18,6 +19,7 @@ entity memd is
         mem_write        : in std_logic; --sinais do controlador
         write_data_mem   : in std_logic_vector(MD_DATA_WIDTH - 1 downto 0);
         address_mem      : in std_logic_vector(MD_ADDR_WIDTH - 1 downto 0);
+        output           : out std_logic_vector(MD_DATA_WIDTH - 1 downto 0);
         read_data_mem    : out std_logic_vector(MD_DATA_WIDTH - 1 downto 0)
     );
 end memd;
@@ -38,4 +40,5 @@ begin
         end if;
     end process;
     read_data_mem <= ram(to_integer(unsigned(ram_addr))); -- when (mem_read = '1');
+    output <= ram(OUTPUT_ADDR);
 end comportamental;

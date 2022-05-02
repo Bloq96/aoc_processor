@@ -13,7 +13,8 @@ use work.GENERIC_FUNCTIONS.ceil_log_2;
 entity single_cycle_datapath is
     generic(
         MEMD_NUMBER_OF_WORDS : natural := 576;
-        MEMI_NUMBER_OF_WORDS : natural := 192);
+        MEMI_NUMBER_OF_WORDS : natural := 192;
+        OUTPUT_ADDR          : natural := 575);
     port(
         alu_selector : in std_logic_vector(5 downto 0);
         clk : in std_logic;
@@ -29,7 +30,8 @@ entity single_cycle_datapath is
         rd_source : in std_logic_vector(2 downto 0);
         register_file_we : in std_logic;
         rst : in std_logic;
-        instruction : out std_logic_vector(31 downto 0));
+        instruction : out std_logic_vector(31 downto 0);
+        output : out std_logic_vector(31 downto 0));
 end entity;
 
 architecture structure_single_cycle_datapath of single_cycle_datapath
@@ -48,7 +50,7 @@ is
     signal data_value : std_logic_vector(31 downto 0); 
     signal epc_output : std_logic_vector(31 downto 0); 
     signal hi_output : std_logic_vector(31 downto 0); 
-    signal immediate : std_logic_vector(31 downto 0); 
+    signal imm_2nd_input : std_logic_vector(31 downto 0); 
     signal instruction_value : std_logic_vector(31 downto 0); 
     signal jump_address : std_logic_vector(31 downto 0); 
     signal lo_output : std_logic_vector(31 downto 0); 
@@ -95,19 +97,22 @@ is
                 largura_dado => 32)
             port map(
                 entrada_a => next_instruction,
-                entrada_b => immediate,
+                entrada_b => shift_lower_imm,
                 saida => branch);
 
         DMEM : memd
             generic map(
                 number_of_words => MEMD_NUMBER_OF_WORDS,
                 MD_DATA_WIDTH => 32,
-                MD_ADDR_WIDTH => MEMD_ADDRESS_LENGTH)
+                MD_ADDR_WIDTH => MEMD_ADDRESS_LENGTH,
+                OUTPUT_ADDR => OUTPUT_ADDR
+            )
             port map(
                 address_mem => memd_address, 
                 clk => clk,
                 mem_write => memd_we,
                 write_data_mem => rt_output,
+                output => output,
                 read_data_mem => data_value);
 
         EPC : registrador
@@ -200,13 +205,13 @@ is
         alu_input_a <= shamt when (has_shamt = '1') else
                        rs_output;
         alu_input_b <= rt_output when (r_instruction = '1') else
-                       immediate;
+                       imm_2nd_input;
         branch_output <= branch when (((not(i_instruction(1)) and
                          i_instruction(0) and alu_zero) = '1') or
                          ((i_instruction(1) and not(i_instruction(0))
                          and not(alu_zero)) = '1')) else
                          next_instruction;
-        immediate <=  shift_lower_imm when ((i_instruction(1) xor
+        imm_2nd_input <=  rt_output when ((i_instruction(1) xor
                       i_instruction(0)) = '1') else
                       mux_2_0;
         jump_address(31 downto 28) <= next_instruction(31 downto 28); 

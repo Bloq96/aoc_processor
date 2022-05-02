@@ -7,7 +7,8 @@ use work.SINGLE_CYCLE_COMPONENTS.all;
 entity single_cycle_processor is
     port(
         clk : in std_logic;
-        rst : in std_logic);
+        rst : in std_logic;
+        output : out std_logic_vector(31 downto 0));
 end entity;
 
 architecture structure_single_cycle_processor of
@@ -46,7 +47,8 @@ single_cycle_processor is
         SCD : single_cycle_datapath
             generic map(
                 MEMD_NUMBER_OF_WORDS => 1024,
-                MEMI_NUMBER_OF_WORDS => 256)
+                MEMI_NUMBER_OF_WORDS => 256,
+                OUTPUT_ADDR => 575)
             port map(
                 alu_selector => w_alu_selector,
                 clk => clk,
@@ -62,5 +64,6 @@ single_cycle_processor is
                 rd_source => w_rd_source,
                 register_file_we => w_register_file_we,
                 rst => rst,
-                instruction => w_instruction);
+                instruction => w_instruction,
+                output => output);
 end architecture;

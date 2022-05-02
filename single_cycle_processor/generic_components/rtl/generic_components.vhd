@@ -68,7 +68,8 @@ package GENERIC_COMPONENTS is
         generic (
             number_of_words : natural;
             MD_DATA_WIDTH   : natural;
-            MD_ADDR_WIDTH   : natural
+            MD_ADDR_WIDTH   : natural;
+            OUTPUT_ADDR     : natural
         );
         port (
             clk              : in std_logic;
@@ -77,6 +78,8 @@ package GENERIC_COMPONENTS is
             write_data_mem   : in std_logic_vector(MD_DATA_WIDTH - 1
             downto 0);
             address_mem      : in std_logic_vector(MD_ADDR_WIDTH - 1
+            downto 0);
+            output           : out std_logic_vector(MD_DATA_WIDTH - 1
             downto 0);
             read_data_mem    : out std_logic_vector(MD_DATA_WIDTH - 1
             downto 0)
