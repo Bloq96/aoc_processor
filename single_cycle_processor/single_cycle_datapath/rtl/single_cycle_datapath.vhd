@@ -9,12 +9,14 @@ use work.GENERIC_COMPONENTS.memi;
 use work.GENERIC_COMPONENTS.registrador;
 use work.GENERIC_COMPONENTS.somador;
 use work.GENERIC_FUNCTIONS.ceil_log_2;
+use work.GENERIC_FUNCTIONS.int2slv;
 
 entity single_cycle_datapath is
     generic(
-        MEMD_NUMBER_OF_WORDS : natural := 576;
-        MEMI_NUMBER_OF_WORDS : natural := 192;
-        OUTPUT_ADDR          : natural := 575);
+        FIRST_INSTRUCTION : natural := 48;
+        MEMD_NUMBER_OF_WORDS : natural := 128;
+        MEMI_NUMBER_OF_WORDS : natural := 128;
+        OUTPUT_ADDR          : natural := 255);
     port(
         alu_selector : in std_logic_vector(5 downto 0);
         clk : in std_logic;
@@ -105,7 +107,7 @@ is
                 number_of_words => MEMD_NUMBER_OF_WORDS,
                 MD_DATA_WIDTH => 32,
                 MD_ADDR_WIDTH => MEMD_ADDRESS_LENGTH,
-                OUTPUT_ADDR => OUTPUT_ADDR
+                OUTPUT_ADDR => (OUTPUT_ADDR-MEMI_NUMBER_OF_WORDS)
             )
             port map(
                 address_mem => memd_address, 
@@ -160,7 +162,8 @@ is
             port map(
                 entrada_a => alu_output_lo(
                 (MEMD_ADDRESS_LENGTH+1) downto 2), 
-                entrada_b => "1101000000",
+                entrada_b => int2slv(-MEMI_NUMBER_OF_WORDS,
+                MEMD_ADDRESS_LENGTH),
                 saida => memd_address);
 
         PC : registrador
@@ -217,7 +220,8 @@ is
         jump_address(31 downto 28) <= next_instruction(31 downto 28); 
         jump_address(27 downto 2) <= instruction_value(25 downto 0); 
         jump_address(1 downto 0) <= (others => '0'); 
-        pc_input <= X"00000100" when (rst = '1') else
+        pc_input <= int2slv(4*FIRST_INSTRUCTION,32) when (rst = '1')
+                    else
                     mux_3_0; 
         mux_0_0 <= mux_0_1 when (pc_source(1) = '1') else
                    next_instruction; 

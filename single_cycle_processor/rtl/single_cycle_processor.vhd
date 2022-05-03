@@ -46,9 +46,10 @@ single_cycle_processor is
 
         SCD : single_cycle_datapath
             generic map(
-                MEMD_NUMBER_OF_WORDS => 1024,
-                MEMI_NUMBER_OF_WORDS => 256,
-                OUTPUT_ADDR => 575)
+                FIRST_INSTRUCTION => 48,
+                MEMD_NUMBER_OF_WORDS => 128,
+                MEMI_NUMBER_OF_WORDS => 128,
+                OUTPUT_ADDR => 255)
             port map(
                 alu_selector => w_alu_selector,
                 clk => clk,

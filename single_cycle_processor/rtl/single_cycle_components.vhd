@@ -22,6 +22,7 @@ package SINGLE_CYCLE_COMPONENTS is
 
 component single_cycle_datapath is
         generic(
+            FIRST_INSTRUCTION : natural;
             MEMD_NUMBER_OF_WORDS : natural;
             MEMI_NUMBER_OF_WORDS : natural;
             OUTPUT_ADDR : natural);

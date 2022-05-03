@@ -42,9 +42,9 @@ end banco_registradores;
 architecture comportamental of banco_registradores is
     constant largura_dado : natural := 32;
     constant largura_ende : natural := 5;
-    constant reset_data_0 : integer := 832;
-    constant reset_data_1 : integer := 3072;
-    constant reset_data_2 : integer := 3072;
+    constant reset_data_0 : integer := 528;
+    constant reset_data_1 : integer := 1024;
+    constant reset_data_2 : integer := 1024;
     constant reset_data_3 : integer := 0;
     constant number_of_registers : natural := 2**largura_ende;
     type registerfile is array(0 to (number_of_registers - 1)) of std_logic_vector((largura_dado - 1) downto 0);
