@@ -52,8 +52,6 @@ if {[file isdirectory sim]} {
     add wave /SCP/SCD/REGF/banco(4)
     add wave /SCP/SCD/REGF/banco(8)
     add wave /SCP/SCD/REGF/banco(9)
-    add wave /SCP/SCD/REGF/banco(10)
-    add wave /SCP/SCD/REGF/banco(11)
     add wave /SCP/SCD/REGF/banco(16)
     add wave /SCP/SCD/REGF/banco(29)
     add wave /SCP/SCD/REGF/banco(30)
@@ -62,5 +60,5 @@ if {[file isdirectory sim]} {
     add wave /SCP/SCD/instruction_value
 	view structure
 	view signals
-	run 20 us
+	run 15 us
 }

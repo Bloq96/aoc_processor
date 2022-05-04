@@ -16,7 +16,6 @@ testbench_single_cycle_controller is
     signal w_lo_we : std_logic;
     signal w_memd_we : std_logic;
     signal w_pc_source : std_logic_vector(2 downto 0);
-    signal w_pc_we : std_logic;
     signal w_r_instruction : std_logic;
     signal w_rd_source : std_logic_vector(2 downto 0);
     signal w_register_file_we : std_logic;
@@ -33,7 +32,6 @@ testbench_single_cycle_controller is
             lo_we : out std_logic;
             memd_we : out std_logic;
             pc_source : out std_logic_vector(2 downto 0);
-            pc_we : out std_logic;
             r_instruction : out std_logic;
             rd_source : out std_logic_vector(2 downto 0);
             register_file_we : out std_logic);
@@ -52,7 +50,6 @@ testbench_single_cycle_controller is
                 lo_we => w_lo_we,
                 memd_we => w_memd_we,
                 pc_source => w_pc_source,
-                pc_we => w_pc_we,
                 r_instruction => w_r_instruction,
                 rd_source => w_rd_source,
                 register_file_we => w_register_file_we);
@@ -60,13 +57,14 @@ testbench_single_cycle_controller is
         w_instruction(31 downto 26) <= "000000",
                                        "000100" after 3800001 ps,
                                        "000101" after 4000001 ps,
-                                       "001101" after 4200001 ps,
-                                       "001111" after 4400001 ps,
-                                       "100011" after 4600001 ps,
-                                       "101011" after 4800001 ps,
-                                       "000010" after 5000001 ps,
-                                       "000011" after 5200001 ps,
-                                       "000001" after 5400001 ps;
+                                       "001000" after 4200001 ps,
+                                       "001101" after 4400001 ps,
+                                       "001111" after 4600001 ps,
+                                       "100011" after 4800001 ps,
+                                       "101011" after 5000001 ps,
+                                       "000010" after 5200001 ps,
+                                       "000011" after 5400001 ps,
+                                       "000001" after 5600001 ps;
         w_instruction(25 downto 6) <= X"00000";
         w_instruction(5 downto 0) <= "000000",
                                      "000011" after 200001 ps,

@@ -20,6 +20,7 @@ end entity;
 
 architecture behaviour_single_cycle_controller of
 single_cycle_controller is
+    signal alu_control : std_logic_vector(1 downto 0);
     signal mux_0 : std_logic_vector(5 downto 0);
     signal mux_1 : std_logic_vector(5 downto 0);
     signal mux_2 : std_logic_vector(5 downto 0);
@@ -30,6 +31,7 @@ single_cycle_controller is
             begin
                 case instruction(31 downto 26) is
                     when "000001" =>    -- nop
+                        alu_control <= "11";
                         epc_we <= '0';
                         has_shamt <= '0'; 
                         hi_we <= '0'; 
@@ -43,6 +45,7 @@ single_cycle_controller is
                         rd_source <= "000"; 
                         register_file_we <= '0'; 
                     when "000010" =>    -- j
+                        alu_control <= "01";
                         epc_we <= '0';
                         has_shamt <= '0'; 
                         hi_we <= '0'; 
@@ -55,6 +58,7 @@ single_cycle_controller is
                         rd_source <= "000"; 
                         register_file_we <= '0'; 
                     when "000011" =>    -- jal
+                        alu_control <= "01";
                         epc_we <= '0';
                         has_shamt <= '0'; 
                         hi_we <= '0'; 
@@ -67,6 +71,7 @@ single_cycle_controller is
                         rd_source <= "111"; 
                         register_file_we <= '1'; 
                     when "000100" =>    -- beq
+                        alu_control <= "00";
                         epc_we <= '0';
                         has_shamt <= '0'; 
                         hi_we <= '0'; 
@@ -79,6 +84,7 @@ single_cycle_controller is
                         rd_source <= "000"; 
                         register_file_we <= '0'; 
                     when "000101" =>    -- bne
+                        alu_control <= "00";
                         epc_we <= '0';
                         has_shamt <= '0'; 
                         hi_we <= '0'; 
@@ -90,7 +96,21 @@ single_cycle_controller is
                         w_r_instruction <= '0'; 
                         rd_source <= "000"; 
                         register_file_we <= '0'; 
+                    when "001000" =>    -- addi
+                        alu_control <= "01";
+                        epc_we <= '0';
+                        has_shamt <= '0'; 
+                        hi_we <= '0'; 
+                        i_instruction <= "00"; 
+                        jump <= '0'; 
+                        lo_we <= '0'; 
+                        memd_we <= '0'; 
+                        pc_source <= "000"; 
+                        w_r_instruction <= '0'; 
+                        rd_source <= "000"; 
+                        register_file_we <= '1'; 
                     when "001101" =>    -- ori
+                        alu_control <= "10";
                         epc_we <= '0';
                         has_shamt <= '0'; 
                         hi_we <= '0'; 
@@ -103,6 +123,7 @@ single_cycle_controller is
                         rd_source <= "000"; 
                         register_file_we <= '1'; 
                     when "001111" =>    -- lui
+                        alu_control <= "11";
                         epc_we <= '0';
                         has_shamt <= '0'; 
                         hi_we <= '0'; 
@@ -115,6 +136,7 @@ single_cycle_controller is
                         rd_source <= "101"; 
                         register_file_we <= '1'; 
                     when "100011" =>    -- lw
+                        alu_control <= "01";
                         epc_we <= '0';
                         has_shamt <= '0'; 
                         hi_we <= '0'; 
@@ -127,6 +149,7 @@ single_cycle_controller is
                         rd_source <= "110"; 
                         register_file_we <= '1'; 
                     when "101011" =>    -- sw
+                        alu_control <= "01";
                         epc_we <= '0';
                         has_shamt <= '0'; 
                         hi_we <= '0'; 
@@ -141,6 +164,7 @@ single_cycle_controller is
                     when others =>
                         case instruction(5 downto 0) is
                             when "000000" =>    -- sll
+                                alu_control <= "00";
                                 epc_we <= '0';
                                 has_shamt <= '1'; 
                                 hi_we <= '0'; 
@@ -153,6 +177,7 @@ single_cycle_controller is
                                 rd_source <= "000"; 
                                 register_file_we <= '1'; 
                             when "000011" =>    -- sra
+                                alu_control <= "00";
                                 epc_we <= '0';
                                 has_shamt <= '1'; 
                                 hi_we <= '0'; 
@@ -165,6 +190,7 @@ single_cycle_controller is
                                 rd_source <= "000"; 
                                 register_file_we <= '1'; 
                             when "001000" =>    -- jr
+                                alu_control <= "00";
                                 epc_we <= '0';
                                 has_shamt <= '0'; 
                                 hi_we <= '0'; 
@@ -177,6 +203,7 @@ single_cycle_controller is
                                 rd_source <= "000"; 
                                 register_file_we <= '0'; 
                             when "001001" =>    -- jalr
+                                alu_control <= "00";
                                 epc_we <= '0';
                                 has_shamt <= '0'; 
                                 hi_we <= '0'; 
@@ -189,6 +216,7 @@ single_cycle_controller is
                                 rd_source <= "111"; 
                                 register_file_we <= '1'; 
                             when "001100" =>    -- syscall
+                                alu_control <= "00";
                                 epc_we <= '1';
                                 has_shamt <= '0'; 
                                 hi_we <= '0'; 
@@ -201,6 +229,7 @@ single_cycle_controller is
                                 rd_source <= "000"; 
                                 register_file_we <= '0'; 
                             when "001101" =>    -- break
+                                alu_control <= "00";
                                 epc_we <= '0';
                                 has_shamt <= '0'; 
                                 hi_we <= '0'; 
@@ -213,6 +242,7 @@ single_cycle_controller is
                                 rd_source <= "000"; 
                                 register_file_we <= '0'; 
                             when "010000" =>    -- mfhi
+                                alu_control <= "00";
                                 epc_we <= '0';
                                 has_shamt <= '0'; 
                                 hi_we <= '0'; 
@@ -225,6 +255,7 @@ single_cycle_controller is
                                 rd_source <= "010"; 
                                 register_file_we <= '1'; 
                             when "010010" =>    -- mflo
+                                alu_control <= "00";
                                 epc_we <= '0';
                                 has_shamt <= '0'; 
                                 hi_we <= '0'; 
@@ -237,6 +268,7 @@ single_cycle_controller is
                                 rd_source <= "011"; 
                                 register_file_we <= '1'; 
                             when "011000" =>    -- mult
+                                alu_control <= "00";
                                 epc_we <= '0';
                                 has_shamt <= '0'; 
                                 hi_we <= '1'; 
@@ -249,6 +281,7 @@ single_cycle_controller is
                                 rd_source <= "000"; 
                                 register_file_we <= '0'; 
                             when "011010" =>    -- div
+                                alu_control <= "00";
                                 epc_we <= '0';
                                 has_shamt <= '0'; 
                                 hi_we <= '1'; 
@@ -261,6 +294,7 @@ single_cycle_controller is
                                 rd_source <= "000"; 
                                 register_file_we <= '0'; 
                             when "101010" =>    -- slt
+                                alu_control <= "00";
                                 epc_we <= '0';
                                 has_shamt <= '0'; 
                                 hi_we <= '0'; 
@@ -274,6 +308,7 @@ single_cycle_controller is
                                 register_file_we <= '1';
                             -- sllv,srav,add,sub,and,or,xor,nor --
                             when others =>
+                                alu_control <= "00";
                                 epc_we <= '0';
                                 has_shamt <= '0'; 
                                 hi_we <= '0'; 
@@ -292,12 +327,11 @@ single_cycle_controller is
         alu_selector <= instruction(5 downto 0) when
                         (w_r_instruction = '1') else
                         mux_0;
-        mux_0 <= mux_2 when ((not(instruction(31)) and
-                 instruction(29)) = '1') else
+        mux_0 <= mux_2 when (alu_control(1) = '1') else
                  mux_1;
-        mux_1 <= "100000" when (instruction(27) = '1') else
+        mux_1 <= "100000" when (alu_control(0) = '1') else
                  "100010";
-        mux_2 <= "000000" when (instruction(27) = '1') else
+        mux_2 <= "000000" when (alu_control(0) = '1') else
                  "100101";
         r_instruction <= w_r_instruction;
 end architecture;
