@@ -6,8 +6,7 @@ end entity;
 
 architecture dataflow_testbench_uc of
 testbench_updated_controller is
-    signal w_funct : std_logic_vector(5 downto 0);
-    signal w_op_code : std_logic_vector(5 downto 0);
+    signal w_instruction : std_logic_vector(31 downto 0);
     signal w_alu_selector : std_logic_vector(5 downto 0);
     signal w_branch : std_logic_vector(1 downto 0);
     signal w_epc_we : std_logic;
@@ -26,8 +25,7 @@ testbench_updated_controller is
 	
 	component updated_controller is
         port(
-            funct : in std_logic_vector(5 downto 0);
-            op_code : in std_logic_vector(5 downto 0);
+            instruction : in std_logic_vector(31 downto 0);
             alu_selector : out std_logic_vector(5 downto 0);
             branch : out std_logic_vector(1 downto 0);
             epc_we : out std_logic;
@@ -48,8 +46,7 @@ testbench_updated_controller is
     begin
 	    UC : updated_controller
             port map(
-                funct => w_funct,
-                op_code => w_op_code,
+                instruction => w_instruction,
                 alu_selector => w_alu_selector,
                 branch => w_branch,
                 epc_we => w_epc_we,
@@ -66,34 +63,35 @@ testbench_updated_controller is
                 rd_source => w_rd_source,
                 register_file_we => w_register_file_we);
 	
-        w_op_code <= "000000",
-                     "000100" after 3800001 ps,
-                     "000101" after 4000001 ps,
-                     "001000" after 4200001 ps,
-                     "001101" after 4400001 ps,
-                     "001111" after 4600001 ps,
-                     "100011" after 4800001 ps,
-                     "101011" after 5000001 ps,
-                     "000010" after 5200001 ps,
-                     "000011" after 5400001 ps,
-                     "000001" after 5600001 ps;
-        w_funct <= "000000",
-                   "000011" after 200001 ps,
-                   "000100" after 400001 ps,
-                   "000111" after 600001 ps,
-                   "001000" after 800001 ps,
-                   "001001" after 1000001 ps,
-                   "001100" after 1200001 ps,
-                   "001101" after 1400001 ps,
-                   "010000" after 1600001 ps,
-                   "010010" after 1800001 ps,
-                   "011000" after 2000001 ps,
-                   "011010" after 2200001 ps,
-                   "100000" after 2400001 ps,
-                   "100010" after 2600001 ps,
-                   "100100" after 2800001 ps,
-                   "100101" after 3000001 ps,
-                   "100110" after 3200001 ps,
-                   "100111" after 3400001 ps,
-                   "101010" after 3600001 ps;
+        w_instruction(31 downto 26) <= "000000",
+                                       "000100" after 3800001 ps,
+                                       "000101" after 4000001 ps,
+                                       "001000" after 4200001 ps,
+                                       "001101" after 4400001 ps,
+                                       "001111" after 4600001 ps,
+                                       "100011" after 4800001 ps,
+                                       "101011" after 5000001 ps,
+                                       "000010" after 5200001 ps,
+                                       "000011" after 5400001 ps,
+                                       "000001" after 5600001 ps;
+        w_instruction(25 downto 6) <= X"00000";
+        w_instruction(5 downto 0) <= "000000",
+                                     "000011" after 200001 ps,
+                                     "000100" after 400001 ps,
+                                     "000111" after 600001 ps,
+                                     "001000" after 800001 ps,
+                                     "001001" after 1000001 ps,
+                                     "001100" after 1200001 ps,
+                                     "001101" after 1400001 ps,
+                                     "010000" after 1600001 ps,
+                                     "010010" after 1800001 ps,
+                                     "011000" after 2000001 ps,
+                                     "011010" after 2200001 ps,
+                                     "100000" after 2400001 ps,
+                                     "100010" after 2600001 ps,
+                                     "100100" after 2800001 ps,
+                                     "100101" after 3000001 ps,
+                                     "100110" after 3200001 ps,
+                                     "100111" after 3400001 ps,
+                                     "101010" after 3600001 ps;
 end architecture;

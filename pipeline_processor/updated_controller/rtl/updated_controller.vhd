@@ -3,7 +3,8 @@ use ieee.std_logic_1164.all;
 
 entity updated_controller is
     port(
-        instruction : in std_logic_vector(31 downto 0);
+        funct : in std_logic_vector(5 downto 0);
+        op_code : in std_logic_vector(5 downto 0);
         alu_selector : out std_logic_vector(5 downto 0);
         branch : out std_logic_vector(1 downto 0);
         epc_we : out std_logic;
@@ -30,9 +31,9 @@ updated_controller is
     signal w_r_instruction : std_logic;
 
     begin
-        decode : process(instruction)
+        decode : process(op_code, funct)
             begin
-                case instruction(31 downto 26) is
+                case op_code is
                     when "000001" =>    -- nop
                         alu_control <= "11";
                         branch <= "00";
@@ -194,7 +195,7 @@ updated_controller is
                         rd_source <= "000"; 
                         register_file_we <= '0'; 
                     when others =>
-                        case instruction(5 downto 0) is
+                        case funct is
                             when "000000" =>    -- sll
                                 alu_control <= "00";
                                 branch <= "00";
@@ -392,7 +393,7 @@ updated_controller is
                 end case; 
         end process;
 
-        alu_selector <= instruction(5 downto 0) when
+        alu_selector <= funct when
                         (w_r_instruction = '1') else
                         mux_0;
         mux_0 <= mux_2 when (alu_control(1) = '1') else

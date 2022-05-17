@@ -33,7 +33,8 @@ pipeline_processor is
     begin
         UC : updated_controller
             port map(
-                instruction => w_instruction,
+                funct => w_instruction(5 downto 0),
+                op_code => w_instruction(31 downto 26),
                 alu_selector => w_alu_selector,
                 branch => w_branch,
                 epc_we => w_epc_we,

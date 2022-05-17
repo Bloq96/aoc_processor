@@ -5,7 +5,8 @@ use ieee.numeric_std.all;
 package PIPELINE_COMPONENTS is
     component updated_controller is
         port(
-            instruction : in std_logic_vector(31 downto 0);
+            funct : in std_logic_vector(5 downto 0);
+            op_code : in std_logic_vector(5 downto 0);
             alu_selector : out std_logic_vector(5 downto 0);
             branch : out std_logic_vector(1 downto 0);
             epc_we : out std_logic;
