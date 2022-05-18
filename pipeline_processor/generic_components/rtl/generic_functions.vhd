@@ -6,26 +6,26 @@ use IEEE.STD_LOGIC_1164.all;
 library work;
 
 package GENERIC_FUNCTIONS is
-    function max(A, B: integer) return integer;
+	function bool2sl(bool: boolean) return std_logic;
     function ceil_division(A, B: natural) return natural;
     function ceil_log_2(N: natural) return natural;
 	function int2slv(int: integer; WORD_LENGTH: natural)
     return std_logic_vector;
+    function max(A, B: integer) return integer;
     function reductive_or(input: std_logic_vector) return std_logic;
 	function slv2int(slv: std_logic_vector) return integer;
 	function slv2nat(slv: std_logic_vector) return natural;
 end package GENERIC_FUNCTIONS;
 
 package body GENERIC_FUNCTIONS is    
-
-    function max(A, B: integer) return integer is
-        begin
-		    if (A > B) then
-			    return A;
-		    else
-			    return B;
-		    end if;
-	end;
+    function bool2sl(bool: boolean) return std_logic is
+	    begin
+		    if (bool) then
+                return '1';
+            else
+                return '0';
+            end if;
+	end function;
 
     function ceil_division(A, B: natural) return natural is
 	    begin
@@ -42,6 +42,15 @@ package body GENERIC_FUNCTIONS is
 	    begin
 		    return (std_logic_vector(to_signed(int, WORD_LENGTH)));
 	end function;
+
+    function max(A, B: integer) return integer is
+        begin
+		    if (A > B) then
+			    return A;
+		    else
+			    return B;
+		    end if;
+	end;
 
     function reductive_or (input : std_logic_vector) return std_logic
     is
