@@ -67,7 +67,6 @@ is
 
 ------------------------- Fetch Instruction --------------------------
 
-    signal clk_stall : std_logic;
     signal current_instruction : std_logic_vector(31 downto 0);
     signal epc_input : std_logic_vector(31 downto 0);
     signal jump_address : std_logic_vector(31 downto 0); 
@@ -80,7 +79,7 @@ is
     signal r_epc_output_1 : std_logic_vector(31 downto 0); 
     signal r_instruction_value_1 : std_logic_vector(31 downto 0); 
     signal r_next_instruction_1 : std_logic_vector(31 downto 0);
-    signal w_data_input_1 : std_logic_vector(116 downto 0);
+            signal w_data_input_1 : std_logic_vector(116 downto 0);
     signal w_data_reg_1 : std_logic_vector(116 downto 0);
  
 -------------------------- Decode Read Reg ---------------------------
@@ -103,15 +102,14 @@ is
     signal r_rd_source_2 : std_logic_vector(2 downto 0);
     signal r_register_file_we_2 : std_logic;
     signal r_rs_output_2 : std_logic_vector(31 downto 0); 
-    signal r_rs_rt_compare_2 : std_logic;
     signal r_rt_output_2 : std_logic_vector(31 downto 0); 
     signal r_write_address_2 : std_logic_vector(4 downto 0); 
     signal reference_register : std_logic_vector(4 downto 0); 
     signal rs_output : std_logic_vector(31 downto 0); 
     signal rt_output : std_logic_vector(31 downto 0); 
     signal shift_lower_imm : std_logic_vector(31 downto 0);
-    signal w_data_input_2 : std_logic_vector(217 downto 0);
-    signal w_data_reg_2 : std_logic_vector(217 downto 0);
+    signal w_data_input_2 : std_logic_vector(216 downto 0);
+    signal w_data_reg_2 : std_logic_vector(216 downto 0);
 
 ---------------------------- Execute ALU -----------------------------
 
@@ -147,10 +145,10 @@ is
     signal r_rd_source_3 : std_logic_vector(2 downto 0);
     signal r_register_file_we_3 : std_logic;
     signal r_rs_output_3 : std_logic_vector(31 downto 0);
-    signal r_rs_rt_compare_3 : std_logic;
     signal r_rt_output_3 : std_logic_vector(31 downto 0);
     signal r_write_address_3 : std_logic_vector(4 downto 0);
     signal rs_output_3 : std_logic_vector(31 downto 0);
+    signal rs_rt_compare : std_logic;
     signal rt_output_3 : std_logic_vector(31 downto 0);
     signal shamt : std_logic_vector(31 downto 0); 
     signal upper_imm : std_logic_vector(31 downto 0); 
@@ -190,10 +188,10 @@ is
             generic map(
                 largura_dado => 32)
             port map(
-                clk => clk_stall,
+                clk => clk,
                 entrada_dados => epc_input,
                 reset => rst,
-                WE => epc_we_1 or rst_1_2,
+                WE => (epc_we_1 and not(stall_1_rst_2)) or rst_1_2,
                 saida_dados => r_epc_output_1);
 
         IMEM : memi
@@ -209,10 +207,10 @@ is
             generic map(
                 largura_dado => 32)
             port map(
-                clk => clk_stall,
+                clk => clk,
                 entrada_dados => pc_input,
                 reset => '0',
-                WE => '1',
+                WE => rst or not(stall_1_rst_2),
                 saida_dados => current_instruction);
 
         PCADD : somador
@@ -223,7 +221,6 @@ is
                 entrada_b => (2=>'1',others=>'0'),
                 saida => r_next_instruction_1);
 
-        clk_stall <= clk and not(stall_1_rst_2);
         epc_input <= r_epc_output_3 when (rst_1_2 = '1') else
                      r_next_instruction_1;
         jump_address(31 downto 28) <= r_next_instruction_1(31 downto 28); 
@@ -232,7 +229,7 @@ is
         mux_0_0 <= mux_0_1 when (pc_source_1(1) = '1') else
                    r_next_instruction_1; 
         mux_0_1 <= r_epc_output_1 when (pc_source_1(0) = '1') else
-                   r_rs_output_3; 
+                   rs_output_3; 
         mux_0_2 <= X"00000000" when (pc_source_1(1) = '1') else
                    mux_0_3; 
         mux_0_3 <= jump_address when (pc_source_1(0) = '1') else
@@ -271,10 +268,10 @@ is
             generic map(
                 largura_dado => 117)
             port map(
-                clk => clk_stall,
+                clk => clk,
                 entrada_dados => w_data_input_1,
                 reset => '0',
-                WE => '1',
+                WE => rst or rst_1_2 or not(stall_1_rst_2),
                 saida_dados(116 downto 111) => r_alu_selector_2,
                 saida_dados(110 downto 109) => r_branch_2,
                 saida_dados(108 downto 77) => r_epc_output_2,
@@ -323,11 +320,10 @@ is
                 sai_Rs_dado => rs_output,
                 sai_Rt_dado => rt_output);
 
-        r_rs_output_2 <= r_rd_input_5 when (forward_rs_2 = '1') else
-                       rs_output;
-        r_rs_rt_compare_2 <= bool2sl(r_rs_output_2 = r_rt_output_2);
-        r_rt_output_2 <= r_rd_input_5 when (forward_rt_2 = '1') else
-                       rt_output;
+        r_rs_output_2 <= rd_input when (forward_rs_2 = '1') else
+                         rs_output;
+        r_rt_output_2 <= rd_input when (forward_rt_2 = '1') else
+                         rt_output;
         reference_register <= r_instruction_value_2(15 downto 11) when
                               (r_r_instruction_2 = '1') else
                               r_instruction_value_2(20 downto 16);
@@ -338,28 +334,27 @@ is
         shift_lower_imm(1 downto 0) <= (others => '0');
         r_write_address_2 <= "11111" when (r_jump_2 = '1') else
                              reference_register;
-        w_data_input_2 <= (137 => '1', others => '0') when
+        w_data_input_2 <= (136 => '1', others => '0') when
                           ((rst or rst_1_2 or stall_1_rst_2) = '1')
                           else
                           w_data_reg_2;
-        w_data_reg_2(217 downto 212) <= r_alu_selector_2;
-        w_data_reg_2(211 downto 210) <= r_branch_2;
-        w_data_reg_2(209 downto 178) <= r_branch_output_2;
-        w_data_reg_2(177 downto 146) <= r_epc_output_2;
-        w_data_reg_2(145) <= r_has_shamt_2;
-        w_data_reg_2(144) <= r_hi_we_2;
-        w_data_reg_2(143) <= r_imm_unsig_2;
-        w_data_reg_2(142 downto 111) <= r_instruction_value_2;
-        w_data_reg_2(110) <= r_jump_r_2;
-        w_data_reg_2(109) <= r_lo_we_2;
-        w_data_reg_2(108) <= r_lw_2;
-        w_data_reg_2(107) <= r_memd_we_2;
-        w_data_reg_2(106 downto 75) <= r_next_instruction_2;
-        w_data_reg_2(74) <= r_r_instruction_2;
-        w_data_reg_2(73 downto 71) <= r_rd_source_2;
-        w_data_reg_2(70) <= r_register_file_we_2;
-        w_data_reg_2(69 downto 38) <= r_rs_output_2;
-        w_data_reg_2(37) <= r_rs_rt_compare_2;
+        w_data_reg_2(216 downto 211) <= r_alu_selector_2;
+        w_data_reg_2(210 downto 209) <= r_branch_2;
+        w_data_reg_2(208 downto 177) <= r_branch_output_2;
+        w_data_reg_2(176 downto 145) <= r_epc_output_2;
+        w_data_reg_2(144) <= r_has_shamt_2;
+        w_data_reg_2(143) <= r_hi_we_2;
+        w_data_reg_2(142) <= r_imm_unsig_2;
+        w_data_reg_2(141 downto 110) <= r_instruction_value_2;
+        w_data_reg_2(109) <= r_jump_r_2;
+        w_data_reg_2(108) <= r_lo_we_2;
+        w_data_reg_2(107) <= r_lw_2;
+        w_data_reg_2(106) <= r_memd_we_2;
+        w_data_reg_2(105 downto 74) <= r_next_instruction_2;
+        w_data_reg_2(73) <= r_r_instruction_2;
+        w_data_reg_2(72 downto 70) <= r_rd_source_2;
+        w_data_reg_2(69) <= r_register_file_we_2;
+        w_data_reg_2(68 downto 37) <= r_rs_output_2;
         w_data_reg_2(36 downto 5) <= r_rt_output_2;
         w_data_reg_2(4 downto 0) <= r_write_address_2;
 
@@ -370,30 +365,29 @@ is
 
         REG2 : registrador
             generic map(
-                largura_dado => 218)
+                largura_dado => 217)
             port map(
                 clk => clk,
                 entrada_dados => w_data_input_2,
                 reset => '0',
                 WE => '1',
-                saida_dados(217 downto 212) => r_alu_selector_3,
-                saida_dados(211 downto 210) => r_branch_3,
-                saida_dados(209 downto 178) => r_branch_output_3,
-                saida_dados(177 downto 146) => r_epc_output_3,
-                saida_dados(145) => r_has_shamt_3,
-                saida_dados(144) => r_hi_we_3,
-                saida_dados(143) => r_imm_unsig_3,
-                saida_dados(142 downto 111) => r_instruction_value_3,
-                saida_dados(110) => r_jump_r_3,
-                saida_dados(109) => r_lo_we_3,
-                saida_dados(108) => r_lw_3,
-                saida_dados(107) => r_memd_we_3,
-                saida_dados(106 downto 75) => r_next_instruction_3,
-                saida_dados(74) => r_r_instruction_3,
-                saida_dados(73 downto 71) => r_rd_source_3,
-                saida_dados(70) => r_register_file_we_3,
-                saida_dados(69 downto 38) => r_rs_output_3,
-                saida_dados(37) => r_rs_rt_compare_3,
+                saida_dados(216 downto 211) => r_alu_selector_3,
+                saida_dados(210 downto 209) => r_branch_3,
+                saida_dados(208 downto 177) => r_branch_output_3,
+                saida_dados(176 downto 145) => r_epc_output_3,
+                saida_dados(144) => r_has_shamt_3,
+                saida_dados(143) => r_hi_we_3,
+                saida_dados(142) => r_imm_unsig_3,
+                saida_dados(141 downto 110) => r_instruction_value_3,
+                saida_dados(109) => r_jump_r_3,
+                saida_dados(108) => r_lo_we_3,
+                saida_dados(107) => r_lw_3,
+                saida_dados(106) => r_memd_we_3,
+                saida_dados(105 downto 74) => r_next_instruction_3,
+                saida_dados(73) => r_r_instruction_3,
+                saida_dados(72 downto 70) => r_rd_source_3,
+                saida_dados(69) => r_register_file_we_3,
+                saida_dados(68 downto 37) => r_rs_output_3,
                 saida_dados(36 downto 5) => r_rt_output_3,
                 saida_dados(4 downto 0) => r_write_address_3);
 
@@ -434,7 +428,7 @@ is
         alu_input_b <= rt_output_3 when (r_r_instruction_3 = '1') else
                        mux_2_0;
         r_rd_input_3 <= mux_1_2 when (r_rd_source_3(2) = '1') else
-                    mux_1_0; 
+                        mux_1_0; 
         mux_1_0 <= mux_1_1 when (r_rd_source_3(1) = '1') else
                    r_alu_output_lo_3; 
         mux_1_1 <= lo_output when (r_rd_source_3(0) = '1') else
@@ -449,12 +443,13 @@ is
                                  (others =>
                                  r_instruction_value_3(15));
         mux_2_0(15 downto 0) <= r_instruction_value_3(15 downto 0);
-        mux_4_0 <= r_rd_input_5 when (forward_rs_3(0) = '1') else
+        mux_4_0 <= rd_input when (forward_rs_3(0) = '1') else
                    r_rd_input_4; 
-        mux_5_0 <= r_rd_input_5 when (forward_rt_3(0) = '1') else
+        mux_5_0 <= rd_input when (forward_rt_3(0) = '1') else
                    r_rd_input_4; 
         rs_output_3 <= mux_4_0 when (forward_rs_3(1) = '1') else
                        r_rs_output_3;
+        rs_rt_compare <= bool2sl(rs_output_3 = rt_output_3);
         rt_output_3 <= mux_5_0 when (forward_rt_3(1) = '1') else
                        r_rt_output_3;
         shamt(31 downto 5) <= (others => '0');
@@ -469,7 +464,7 @@ is
         w_data_reg_3(72 downto 41) <= r_rd_input_3;
         w_data_reg_3(40 downto 38) <= r_rd_source_3;
         w_data_reg_3(37) <= r_register_file_we_3;
-        w_data_reg_3(36 downto 5) <= r_rt_output_3;
+        w_data_reg_3(36 downto 5) <= rt_output_3;
         w_data_reg_3(4 downto 0) <= r_write_address_3;
 
        
@@ -477,7 +472,7 @@ is
         jump_r_3 <= r_jump_r_3;
         lw_3 <= r_lw_3;
         rs_3 <= r_instruction_value_3(25 downto 21);
-        rs_rt_compare_3 <= r_rs_rt_compare_3;
+        rs_rt_compare_3 <= rs_rt_compare;
         rt_3 <= r_instruction_value_3(20 downto 16);
         write_address_3 <= r_write_address_3;
  

@@ -50,7 +50,7 @@ pipeline_controller is
     begin
         branch_logic_3 <= (rs_rt_compare_3 and branch_3(0)) or
         (not(rs_rt_compare_3) and branch_3(1));
-        jump_logic_1 <= jump_r_3 & branch_logic_3;
+        jump_logic_1 <= branch_logic_3 & jump_r_3;
         rs_2_wa_3_comp <= bool2sl(rs_2=write_address_3);
         rs_2_wa_5_comp <= bool2sl(rs_2=write_address_5);
         rs_3_wa_4_comp <= bool2sl(rs_3=write_address_4);
@@ -63,7 +63,7 @@ pipeline_controller is
         forward_rs_5 <= register_file_we_5 and rs_3_wa_5_comp;
         forward_rt_4 <= register_file_we_4 and rt_3_wa_4_comp;
         forward_rt_5 <= register_file_we_5 and rt_3_wa_5_comp;
-        rst_3 <= jump_r_3 xor branch_logic_3;
+        rst_3 <= branch_logic_3 xor jump_r_3;
 
         forward_rs_2 <= register_file_we_5 and rs_2_wa_5_comp;
         forward_rs_3 <= (forward_rs_4 or forward_rs_5) &

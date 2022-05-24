@@ -7,13 +7,13 @@ end entity;
 architecture dataflow_processor_tb of pipeline_processor_testbench is
 	signal clock : std_logic;
 	signal reset : std_logic;
-	signal output : std_logic_vector(31 downto 0);
+	signal output : std_logic_vector(15 downto 0);
 	
     component pipeline_processor is
         port(
             clk : in std_logic;
             rst : in std_logic;
-            output : out std_logic_vector(31 downto 0));
+            output : out std_logic_vector(15 downto 0));
     end component;
 	
 	begin
@@ -27,7 +27,7 @@ architecture dataflow_processor_tb of pipeline_processor_testbench is
 
         reset <= '1', '0' after 100001 ps;   
                
-		SCP : pipeline_processor
+		PP : pipeline_processor
 			port map (
 				clk => clock,
 				rst => reset,
