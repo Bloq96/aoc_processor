@@ -11,6 +11,8 @@ package GENERIC_FUNCTIONS is
     function ceil_log_2(N: natural) return natural;
 	function int2slv(int: integer; WORD_LENGTH: natural)
     return std_logic_vector;
+	function nat2slv(unsig: natural; WORD_LENGTH: natural)
+    return std_logic_vector;
     function reductive_and(input: std_logic_vector) return std_logic;
     function reductive_or(input: std_logic_vector) return std_logic;
 	function slv2int(slv: std_logic_vector) return integer;
@@ -51,6 +53,12 @@ package body GENERIC_FUNCTIONS is
 			    return B;
 		    end if;
 	end;
+
+    function nat2slv(unsig: natural; WORD_LENGTH: natural)
+    return std_logic_vector is
+	    begin
+		    return (std_logic_vector(to_unsigned(unsig, WORD_LENGTH)));
+	end function;
 
     function reductive_and (input : std_logic_vector) return std_logic
     is
