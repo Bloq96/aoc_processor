@@ -15,6 +15,7 @@ package GENERIC_FUNCTIONS is
     return std_logic_vector;
     function reductive_and(input: std_logic_vector) return std_logic;
     function reductive_or(input: std_logic_vector) return std_logic;
+    function reductive_xor(input: std_logic_vector) return std_logic;
 	function slv2int(slv: std_logic_vector) return integer;
 	function slv2nat(slv: std_logic_vector) return natural;
 end package GENERIC_FUNCTIONS;
@@ -76,6 +77,16 @@ package body GENERIC_FUNCTIONS is
         begin
             for it in input'range loop
                 result := result or input(it);
+            end loop;
+            return result;
+    end function;
+	 
+    function reductive_xor (input : std_logic_vector) return std_logic
+    is
+        variable result : std_logic := '0';
+        begin
+            for it in input'range loop
+                result := result xor input(it);
             end loop;
             return result;
     end function;

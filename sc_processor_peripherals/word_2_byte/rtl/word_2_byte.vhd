@@ -39,12 +39,12 @@ architecture structure_w2b of word_2_byte is
 
         UC : up_counter
             generic map(
-                DATA_LENGTH => (ceil_log_2(DATA_LENGTH/8)+1))
+                DATA_LENGTH => ceil_log_2(DATA_LENGTH/8))
             port map(
                 clk => clk,
                 count => '1',
                 max_count => int2slv(((DATA_LENGTH/8)-1),
-                (ceil_log_2(DATA_LENGTH/8)+1)), 
+                ceil_log_2(DATA_LENGTH/8)), 
                 rst => rst,
                 set => set_word,
                 reset => w_done);

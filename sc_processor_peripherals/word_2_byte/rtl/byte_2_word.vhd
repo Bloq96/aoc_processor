@@ -39,12 +39,12 @@ architecture structure_b2w of byte_2_word is
 
         UC : up_counter
             generic map(
-                DATA_LENGTH => (ceil_log_2(DATA_LENGTH/8)+1))
+                DATA_LENGTH => ceil_log_2(DATA_LENGTH/8))
             port map(
                 clk => clk,
                 count => set_byte,
                 max_count => int2slv(((DATA_LENGTH/8)-1),
-                (ceil_log_2(DATA_LENGTH/8)+1)), 
+                ceil_log_2(DATA_LENGTH/8)), 
                 rst => rst,
                 set => w_reset,
                 reset => w_reset);
