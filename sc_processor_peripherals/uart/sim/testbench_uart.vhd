@@ -14,6 +14,7 @@ architecture dataflow_testbench_uart of testbench_uart is
     signal send : std_logic;
     signal byte00 : std_logic_vector(7 downto 0); 
     signal clk0 : std_logic;
+    signal ready : std_logic;
     signal bit01 : std_logic;
     signal clk1 : std_logic;
     signal recv : std_logic;
@@ -40,7 +41,8 @@ architecture dataflow_testbench_uart of testbench_uart is
             clk_ticks : in std_logic_vector((MAX_LENGTH-1) downto 0);
             rst : in std_logic;
             send : in std_logic;
-            data_bit : out std_logic);
+            data_bit : out std_logic;
+            ready : out std_logic);
     end component;
  
     begin
@@ -53,7 +55,8 @@ architecture dataflow_testbench_uart of testbench_uart is
                 clk_ticks => X"00000003",
                 rst => rst,
                 send => send,
-                data_bit => bit01);
+                data_bit => bit01,
+                ready => ready);
 
         RX : uart_rx
             generic map(

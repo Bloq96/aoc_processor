@@ -18,7 +18,8 @@ entity uart_tx is
         clk_ticks : in std_logic_vector((MAX_LENGTH-1) downto 0);
         rst : in std_logic;
         send : in std_logic;
-        data_bit : out std_logic);
+        data_bit : out std_logic;
+        ready : out std_logic);
 end entity;
 
 architecture structure_tx of uart_tx is
@@ -79,5 +80,6 @@ architecture structure_tx of uart_tx is
         w_shifted(10) <= '0'; 
         w_shifted(9 downto 0) <= w_byte(10 downto 1); 
         
-        data_bit <= not(w_block) or w_byte(0); 
+        data_bit <= not(w_block) or w_byte(0);
+        ready <= not(w_block) or (w_done and w_tick);
 end architecture;

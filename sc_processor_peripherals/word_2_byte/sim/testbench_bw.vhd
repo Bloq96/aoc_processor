@@ -20,6 +20,7 @@ architecture dataflow_testcench_bw of testbench_bw is
     signal set_byte01 : std_logic;
     signal set_word12 : std_logic;
     signal set_byte22 : std_logic;
+    signal shift : std_logic;
 
     component byte_2_word is
         generic(
@@ -40,6 +41,7 @@ architecture dataflow_testcench_bw of testbench_bw is
             clk : in std_logic;
             rst : in std_logic;
             set_word : in std_logic;
+            shift : in std_logic;
             word : in std_logic_vector((DATA_LENGTH-1) downto 0); 
             byte : out std_logic_vector(7 downto 0); 
             valid_byte : out std_logic);
@@ -64,6 +66,7 @@ architecture dataflow_testcench_bw of testbench_bw is
                 clk => clk,
                 rst => rst,
                 set_word => set_word00,
+                shift => shift,
                 word => word00,
                 byte => byte01,
                 valid_byte => set_byte01);
@@ -75,6 +78,7 @@ architecture dataflow_testcench_bw of testbench_bw is
                 clk => clk,
                 rst => rst,
                 set_word => set_word12,
+                shift => shift,
                 word => word12,
                 byte => byte22,
                 valid_byte => set_byte22);
@@ -92,5 +96,6 @@ architecture dataflow_testcench_bw of testbench_bw is
         '1' after 500001 ps, '0' after 600001 ps,
         '1' after 2700001 ps, '0' after 2800001 ps;
         word00 <= X"00000000", X"01020304" after 100001 ps,
-        X"05060708" after 500001 ps, X"090A0B0C" after 2700001 ps; 
+        X"05060708" after 500001 ps, X"090A0B0C" after 2700001 ps;
+        shift <= '1'; 
 end architecture;

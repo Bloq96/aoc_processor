@@ -78,7 +78,7 @@ architecture structure_rx of uart_rx is
         w_shifted(10) <= data_bit; 
         w_shifted(9 downto 0) <= w_byte(10 downto 1); 
         
-        recv <= w_done and w_tick and
+        recv <= w_block and w_done and w_tick and
         not(reductive_xor(w_byte(8 downto 1)) xor w_byte(9));
         byte <= w_byte(8 downto 1);
 end architecture;

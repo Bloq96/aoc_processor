@@ -15,6 +15,7 @@ entity word_2_byte is
         clk : in std_logic;
         rst : in std_logic;
         set_word : in std_logic;
+        shift : in std_logic;
         word : in std_logic_vector((DATA_LENGTH-1) downto 0); 
         byte : out std_logic_vector(7 downto 0); 
         valid_byte : out std_logic);
@@ -34,7 +35,7 @@ architecture structure_w2b of word_2_byte is
                 clk => clk,
                 entrada_dados => w_input,
                 reset => rst,
-                WE => '1',
+                WE => set_word or shift,
                 saida_dados => w_word);
 
         UC : up_counter
@@ -42,7 +43,7 @@ architecture structure_w2b of word_2_byte is
                 DATA_LENGTH => ceil_log_2(DATA_LENGTH/8))
             port map(
                 clk => clk,
-                count => '1',
+                count => shift,
                 max_count => int2slv(((DATA_LENGTH/8)-1),
                 ceil_log_2(DATA_LENGTH/8)), 
                 rst => rst,
@@ -55,7 +56,7 @@ architecture structure_w2b of word_2_byte is
             port map(
                 clk => clk,
                 entrada_dados => "1",
-                reset => rst or (w_done and not(set_word)),
+                reset => rst or (shift and w_done and not(set_word)),
                 WE => set_word,
                 saida_dados(0) => valid_byte);
 

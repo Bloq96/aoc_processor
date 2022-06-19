@@ -23,6 +23,7 @@ end entity;
 architecture structure_b2w of byte_2_word is
     signal w_done : std_logic;
     signal w_reset : std_logic;
+    signal w_restart : std_logic;
     signal w_shifted : std_logic_vector((DATA_LENGTH-1) downto 0); 
     signal w_word : std_logic_vector((DATA_LENGTH-1) downto 0); 
     
@@ -46,7 +47,7 @@ architecture structure_b2w of byte_2_word is
                 max_count => int2slv(((DATA_LENGTH/8)-1),
                 ceil_log_2(DATA_LENGTH/8)), 
                 rst => rst,
-                set => w_reset,
+                set => w_restart,
                 reset => w_reset);
 
         DN : registrador
@@ -56,9 +57,10 @@ architecture structure_b2w of byte_2_word is
                 clk => clk,
                 entrada_dados => "1",
                 reset => rst or w_done,
-                WE => w_reset,
+                WE => w_restart,
                 saida_dados(0) => w_done);
 
+        w_restart <= set_byte and w_reset;
         w_shifted((DATA_LENGTH-1) downto (DATA_LENGTH-8)) <= byte; 
         w_shifted((DATA_LENGTH-9) downto 0) <=
         w_word((DATA_LENGTH-1) downto 8); 

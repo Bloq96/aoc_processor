@@ -2,13 +2,19 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 library work;
+use work.PERIPHERAL_COMPONENTS.byte_2_word;
+use work.PERIPHERAL_COMPONENTS.uart_rx;
+use work.PERIPHERAL_COMPONENTS.uart_tx;
+use work.PERIPHERAL_COMPONENTS.word_2_byte;
 use work.SINGLE_CYCLE_COMPONENTS.all;
 
 entity single_cycle_processor is
     port(
         clk : in std_logic;
         rst : in std_logic;
-        output : out std_logic_vector(31 downto 0));
+        uart_rx_bit : in std_logic;
+        output : out std_logic_vector(31 downto 0);
+        uart_tx_bit : out std_logic);
 end entity;
 
 architecture structure_single_cycle_processor of
@@ -35,6 +41,12 @@ single_cycle_processor is
     signal w_r_instruction : std_logic;
     signal w_rd_source : std_logic_vector(2 downto 0);
     signal w_register_file_we : std_logic;
+
+    signal w_load_byte : std_logic;
+    signal w_next_byte : std_logic;
+    signal w_rx_byte : std_logic_vector(7 downto 0);
+    signal w_tx_byte : std_logic_vector(7 downto 0);
+    signal w_valid_byte : std_logic;
 
     begin
         SCC : single_cycle_controller
@@ -88,8 +100,52 @@ single_cycle_processor is
                 instruction => w_instruction,
                 output => output);
 
+        B2W : byte_2_word
+            generic map(
+                DATA_LENGTH => 32)
+            port map(
+                byte => w_rx_byte,
+                clk => clk,
+                rst => rst,
+                set_byte => w_load_byte,
+                valid_word => w_er_1_en,
+                word => w_er_1_input);
+
+        RX : uart_rx
+            generic map(
+                MAX_LENGTH => 32)
+            port map(
+                clk => clk,
+                clk_ticks => X"00000001",
+                data_bit => uart_rx_bit,
+                rst => rst,
+                byte => w_rx_byte,
+                recv => w_load_byte);
+
+        TX : uart_tx
+            generic map(
+                MAX_LENGTH => 32)
+            port map(
+                byte => w_tx_byte, 
+                clk => clk,
+                clk_ticks => X"00000001",
+                rst => rst,
+                send => w_valid_byte,
+                data_bit => uart_tx_bit,
+                ready => w_next_byte);
+
+        W2B : word_2_byte
+            generic map(
+                DATA_LENGTH => 32)
+            port map(
+                clk => clk,
+                rst => rst,
+                set_word => w_er_1_flag,
+                shift => w_next_byte,
+                word => w_er_1_output,
+                byte => w_tx_byte,
+                valid_byte => w_valid_byte);
+
         w_er_0_en <= '0', '1' after 100001 ps, '0' after 200001 ps;
         w_er_0_input <= X"00000001";
-        w_er_1_en <= '0', '1' after 2100001 ps, '0' after 2200001 ps;
-        w_er_1_input <= X"00000002";
 end architecture;
