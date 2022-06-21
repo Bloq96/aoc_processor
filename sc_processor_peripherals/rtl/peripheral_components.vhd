@@ -15,6 +15,21 @@ package PERIPHERAL_COMPONENTS is
             word : out std_logic_vector((DATA_LENGTH-1) downto 0)); 
     end component;
 
+    component timer is
+        generic(
+            DATA_LENGTH : natural := 32);
+        port(
+            clk : in std_logic;
+            clk_division : in std_logic_vector((DATA_LENGTH-1) downto 0); 
+            count : in std_logic;
+            max_count : in std_logic_vector((DATA_LENGTH-1) downto 0); 
+            rst : in std_logic;
+            set : in std_logic;
+            value_division : out std_logic_vector((DATA_LENGTH-1) downto 0); 
+            value_count : out std_logic_vector((DATA_LENGTH-1) downto 0); 
+            reset : out std_logic);
+    end component;
+
     component uart_rx is
         generic(
             MAX_LENGTH : natural := 32);

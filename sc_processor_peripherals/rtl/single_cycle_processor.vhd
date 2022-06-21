@@ -3,6 +3,7 @@ use ieee.std_logic_1164.all;
 
 library work;
 use work.PERIPHERAL_COMPONENTS.byte_2_word;
+use work.PERIPHERAL_COMPONENTS.timer;
 use work.PERIPHERAL_COMPONENTS.uart_rx;
 use work.PERIPHERAL_COMPONENTS.uart_tx;
 use work.PERIPHERAL_COMPONENTS.word_2_byte;
@@ -23,8 +24,8 @@ single_cycle_processor is
     signal w_arith : std_logic_vector(2 downto 0);
     signal w_epc_we : std_logic;
     signal w_er_0_en : std_logic;
+    signal w_er_0_flag : std_logic;
     signal w_er_0_input : std_logic_vector(31 downto 0);
-    signal w_er_0_output : std_logic_vector(31 downto 0);
     signal w_er_1_en : std_logic;
     signal w_er_1_flag : std_logic;
     signal w_er_1_input : std_logic_vector(31 downto 0);
@@ -94,11 +95,24 @@ single_cycle_processor is
                 rd_source => w_rd_source,
                 register_file_we => w_register_file_we,
                 rst => rst,
-                er_0_output => w_er_0_output,
+                er_0_flag => w_er_0_flag,
                 er_1_flag => w_er_1_flag,
                 er_1_output => w_er_1_output,
                 instruction => w_instruction,
                 output => output);
+
+        TIM : timer
+            generic map(
+                DATA_LENGTH => 32)
+            port map(
+                clk => clk,
+                clk_division => X"00000014",
+                count => '1',
+                max_count => X"00000008",
+                rst => rst,
+                set => w_er_0_flag,
+                value_count => w_er_0_input,
+                reset => w_er_0_en);
 
         B2W : byte_2_word
             generic map(
@@ -145,7 +159,4 @@ single_cycle_processor is
                 word => w_er_1_output,
                 byte => w_tx_byte,
                 valid_byte => w_valid_byte);
-
-        w_er_0_en <= '0', '1' after 100001 ps, '0' after 200001 ps;
-        w_er_0_input <= X"00000001";
 end architecture;

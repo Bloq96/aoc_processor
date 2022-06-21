@@ -43,6 +43,7 @@ entity single_cycle_datapath is
         rd_source : in std_logic_vector(2 downto 0);
         register_file_we : in std_logic;
         rst : in std_logic;
+        er_0_flag : out std_logic;
         er_0_output : out std_logic_vector(31 downto 0);
         er_1_flag : out std_logic;
         er_1_output : out std_logic_vector(31 downto 0);
@@ -71,6 +72,7 @@ is
     signal instruction_value : std_logic_vector(31 downto 0); 
     signal interrupt : std_logic_vector(31 downto 0); 
     signal interrupts : std_logic_vector(3 downto 0); 
+    signal interrupts_enabled : std_logic_vector(4 downto 0); 
     signal jump_address : std_logic_vector(31 downto 0); 
     signal lo_output : std_logic_vector(31 downto 0); 
     signal memd_address : std_logic_vector((MEMD_ADDRESS_LENGTH-1)
@@ -103,10 +105,12 @@ is
     signal shamt : std_logic_vector(31 downto 0); 
     signal shift_lower_imm : std_logic_vector(31 downto 0);
     signal upper_imm : std_logic_vector(31 downto 0); 
+    signal w_er_0_en : std_logic; 
+    signal w_er_0_flag : std_logic; 
     signal w_er_0_output : std_logic_vector(31 downto 0); 
     signal w_er_1_en : std_logic; 
-    signal w_er_1_output : std_logic_vector(31 downto 0); 
     signal w_er_1_flag : std_logic; 
+    signal w_er_1_output : std_logic_vector(31 downto 0); 
     signal write_address : std_logic_vector(4 downto 0); 
     signal write_peripheral : std_logic; 
 
@@ -183,8 +187,7 @@ is
                 clk => clk,
                 entrada_dados => rt_output,
                 reset => rst,
-                WE => (write_peripheral and
-                not(peripheral_address(0))),
+                WE => w_er_0_en,
                 saida_dados => er_0_output);
 
         ER1_0 : registrador
@@ -206,6 +209,16 @@ is
                 reset => rst,
                 WE => w_er_1_en,
                 saida_dados => er_1_output);
+
+        FR0 : registrador
+            generic map(
+                largura_dado => 1)
+            port map(
+                clk => clk,
+                entrada_dados => "1",
+                reset => rst or (w_er_0_flag and not(w_er_0_en)),
+                WE => w_er_0_en,
+                saida_dados(0) => w_er_0_flag);
 
         FR1 : registrador
             generic map(
@@ -234,7 +247,7 @@ is
             port map(
                 addresses(127 downto 96) => (102 => '1', 101 => '1',
                 others => '0'),
-                addresses(95 downto 64) => (69 => '1', 68 => '1',
+                addresses(95 downto 64) => (69 => '1', --68 => '1',
                 others => '0'),
                 addresses(63 downto 32) => (36 => '1', 34 => '1',
                 others => '0'),
@@ -244,6 +257,7 @@ is
                 clk => clk,
                 interruptions => interrupts,
                 interruptions_to_enable => (others => '1'),
+                interruptions_enabled => interrupts_enabled,
                 rst => rst,
                 jump_address => interrupt);
 
@@ -384,15 +398,16 @@ is
                                  i_instruction(0)) = '1') else
                                  (others => instruction_value(15));
         mux_2_0(15 downto 0) <= instruction_value(15 downto 0);
-        mux_3_0 <= X"00000000" when (reductive_or(interrupts) = '1')
-                   else
+        mux_3_0 <= X"00000000" when ((reductive_or(interrupts and
+                   interrupts_enabled(3 downto 0)) and
+                   interrupts_enabled(4)) = '1') else
                    mux_3_1;
         mux_3_1 <= mux_0_2 when (pc_source(2) = '1') else
                    mux_0_0;
         mux_4_0 <= mux_4_1 when (read_peripheral = '1') else
                    data_value; 
         mux_4_1 <= w_er_1_output when (peripheral_address(0) = '1') else
-                   w_er_0_output;  
+                   w_er_0_output;
 
         peripheral <= bool2sl(slv2int(peripheral_address) >= 0);
         read_peripheral <= lsw(1) and not(lsw(0)) and peripheral; 
@@ -410,6 +425,7 @@ is
         upper_imm(31 downto 16) <= instruction_value(15 downto 0);
         upper_imm(15 downto 0) <= (others => '0');
 
+        w_er_0_en <= write_peripheral and not(peripheral_address(0));
         w_er_1_en <= write_peripheral and peripheral_address(0);
 
         write_address <= "11111" when (jump = '1') else
@@ -417,6 +433,7 @@ is
         
         write_peripheral <= lsw(1) and lsw(0) and peripheral; 
        
+        er_0_flag <= w_er_0_flag;
         er_1_flag <= w_er_1_flag;
         instruction <= instruction_value;
 end architecture;
