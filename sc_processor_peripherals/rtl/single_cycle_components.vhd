@@ -37,6 +37,10 @@ component single_cycle_datapath is
             er_0_input : in std_logic_vector(31 downto 0);
             er_1_en : in std_logic;
             er_1_input : in std_logic_vector(31 downto 0);
+            er_2_en : in std_logic;
+            er_2_input : in std_logic;
+            er_3_en : in std_logic;
+            er_3_input : in std_logic;
             has_shamt : in std_logic;
             hi_we : in std_logic;
             i_instruction : in std_logic_vector(1 downto 0);
@@ -53,6 +57,10 @@ component single_cycle_datapath is
             er_0_output : out std_logic_vector(31 downto 0);
             er_1_flag : out std_logic;
             er_1_output : out std_logic_vector(31 downto 0);
+            er_2_flag : out std_logic;
+            er_2_output : out std_logic;
+            er_3_flag : out std_logic;
+            er_3_output : out std_logic;
             instruction : out std_logic_vector(31 downto 0);
             output : out std_logic_vector(31 downto 0));
         end component;

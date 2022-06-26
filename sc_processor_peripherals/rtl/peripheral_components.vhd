@@ -15,6 +15,16 @@ package PERIPHERAL_COMPONENTS is
             word : out std_logic_vector((DATA_LENGTH-1) downto 0)); 
     end component;
 
+    component gpio is
+        generic(
+            DATA_LENGTH : natural := 32);
+        port(
+            data_in : in std_logic_vector((DATA_LENGTH-1) downto 0);
+            mode : in std_logic_vector((DATA_LENGTH-1) downto 0);
+            data : inout std_logic_vector((DATA_LENGTH-1) downto 0);
+            data_out : out std_logic_vector((DATA_LENGTH-1) downto 0));
+    end component;
+
     component timer is
         generic(
             DATA_LENGTH : natural := 32);

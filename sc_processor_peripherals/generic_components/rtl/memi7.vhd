@@ -22,8 +22,6 @@ architecture comportamental of memi is
 	type rom_type is array (0 to 2 ** MI_ADDR_WIDTH - 1) of std_logic_vector(INSTR_WIDTH - 1 downto 0);
 	signal rom : rom_type := (
         0       => X"0000000C", -- syscall
-        1       => X"0000000D", -- break
-        2       => X"0000000D", -- break
         8       => X"23BDFFF8", -- addi $sp, $sp, -8
         9       => X"AFA80000", -- sw $t0, 0($sp)
         10      => X"AFA90004", -- sw $t1, 4($sp)
@@ -51,16 +49,6 @@ architecture comportamental of memi is
         32      => X"8FA80000", -- lw $t0, 0($sp)
         33      => X"23BD0008", -- addi $sp, $sp, 8
         34      => X"0000000D", -- break
-        36      => X"23BDFFF8", -- addi $sp, $sp, -8
-        37      => X"AFA80000", -- sw $t0, 0($sp)
-        38      => X"AFA90004", -- sw $t1, 4($sp)
-        39      => X"34080400", -- ori $t0, $0, 1024
-        40      => X"8D090008", -- lw $t1, 8($t0) 
-        41      => X"AD09000C", -- sw $t1, 12($t0)
-        42      => X"8FA90004", -- lw $t1, 4($sp)
-        43      => X"8FA80000", -- lw $t0, 0($sp)
-        44      => X"23BD0008", -- addi $sp, $sp, 8
-        45      => X"0000000D", -- break
         -- init --
         48      => X"34080400", -- ori $t0, $0, 1024
         49      => X"AD000000", -- sw $0, 0($t0)
