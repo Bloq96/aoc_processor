@@ -58,26 +58,47 @@ if {[file isdirectory sim]} {
 	vsim -L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L cycloneii -L rtl_work -L work -voptargs=\"+acc\" -t 1ps sc_processor_testbench
 
 	add wave *
-    add wave -radix decimal /SCP/SCD/REGF/banco(2)
-    add wave -radix decimal /SCP/SCD/REGF/banco(4)
-    add wave -radix decimal /SCP/SCD/REGF/banco(8)
-    add wave -radix decimal /SCP/SCD/REGF/banco(9)
-    add wave -radix decimal /SCP/SCD/REGF/banco(10)
-    add wave -radix decimal /SCP/SCD/REGF/banco(11)
-    add wave -radix decimal /SCP/SCD/REGF/banco(16)
-    add wave -radix decimal /SCP/SCD/REGF/banco(29)
-    add wave -radix decimal /SCP/SCD/REGF/banco(30)
-    add wave -radix decimal /SCP/SCD/REGF/banco(31)
-    add wave -radix decimal /SCP/SCD/epc_output
-    add wave -radix decimal /SCP/SCD/current_instruction
-    add wave -radix hexadecimal /SCP/SCD/instruction_value
-    add wave /SCP/w_er_0_en
-    add wave /SCP/w_er_0_flag
-    add wave -radix decimal /SCP/w_er_0_input
-    add wave -radix decimal /SCP/SCD/er_0_output
-    add wave -radix decimal /SCP/TIM/CNTx/w_value
-    add wave -radix decimal /SCP/TIM/DIVx/w_value
+    add wave -radix decimal /SCP0/SCD/REGF/banco(2)
+    add wave -radix decimal /SCP0/SCD/REGF/banco(4)
+    add wave -radix decimal /SCP0/SCD/REGF/banco(8)
+    add wave -radix decimal /SCP0/SCD/REGF/banco(9)
+    add wave -radix decimal /SCP0/SCD/REGF/banco(10)
+    add wave -radix decimal /SCP0/SCD/REGF/banco(11)
+    add wave -radix decimal /SCP0/SCD/REGF/banco(16)
+    add wave -radix decimal /SCP0/SCD/REGF/banco(29)
+    add wave -radix decimal /SCP0/SCD/REGF/banco(30)
+    add wave -radix decimal /SCP0/SCD/REGF/banco(31)
+    add wave -radix decimal /SCP0/SCD/epc_output
+    add wave -radix decimal /SCP0/SCD/current_instruction
+    add wave -radix hexadecimal /SCP0/SCD/instruction_value
+    add wave /SCP0/w_er_2_en
+    add wave -radix decimal /SCP0/w_er_2_input
+    add wave -radix decimal /SCP0/w_er_2_output
+    add wave /SCP0/w_er_3_en
+    add wave -radix decimal /SCP0/w_er_3_input
+    add wave -radix decimal /SCP0/w_er_3_output
+    add wave /SCP0/w_er_0_en
+    add wave /SCP0/w_er_0_flag
+    add wave -radix decimal /SCP0/w_er_0_input
+    add wave -radix decimal /SCP0/SCD/er_0_output
+    add wave -radix decimal /SCP0/TIM/CNTx/w_value
+    add wave -radix decimal /SCP0/TIM/DIVx/w_value
+    add wave /SCP0/w_er_1_en
+    add wave /SCP0/w_er_1_flag
+    add wave -radix decimal /SCP0/w_er_1_input
+    add wave -radix decimal /SCP0/w_er_1_output
+    add wave -radix unsigned /SCP0/W2B/UC/w_value
+    add wave -radix unsigned /SCP0/TX/BC/w_value
+    add wave -radix unsigned /SCP0/TX/CC/w_value
+    add wave /SCP0/w_tx_byte
+    add wave /SCP0/w_next_byte
+    add wave /SCP0/w_valid_byte
+    add wave -radix unsigned /SCP0/RX/BC/w_value
+    add wave -radix unsigned /SCP0/RX/CC/w_value
+    add wave -radix unsigned /SCP0/B2W/UC/w_value
+    add wave /SCP0/w_rx_byte
+    add wave /SCP0/w_load_byte
 	view structure
 	view signals
-	run 8 us
+	run 50 us
 }

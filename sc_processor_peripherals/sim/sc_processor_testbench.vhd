@@ -6,13 +6,11 @@ end entity;
 
 architecture dataflow_processor_tb of sc_processor_testbench is
 	signal clock : std_logic;
-	signal gpio_data_0 : std_logic_vector(1 downto 0);
-	signal gpio_data_1 : std_logic_vector(1 downto 0);
+	signal gpio_data : std_logic_vector(1 downto 0);
 	signal reset : std_logic;
-    signal uart_0 : std_logic;
-    signal uart_1 : std_logic;
-	signal output_0 : std_logic_vector(31 downto 0);
-	signal output_1 : std_logic_vector(31 downto 0);
+    signal uart_rx : std_logic;
+    signal uart_tx : std_logic;
+	signal output : std_logic_vector(7 downto 0);
 	
     component single_cycle_processor is
         port(
@@ -20,7 +18,7 @@ architecture dataflow_processor_tb of sc_processor_testbench is
             rst : in std_logic;
             uart_rx_bit : in std_logic;
             gpio_data : inout std_logic_vector(1 downto 0);
-            output : out std_logic_vector(31 downto 0);
+            output : out std_logic_vector(7 downto 0);
             uart_tx_bit : out std_logic);
     end component;
 	
@@ -28,33 +26,21 @@ architecture dataflow_processor_tb of sc_processor_testbench is
         pulse : process
             begin
                 clock <= '1';
-                wait for 50 ns;
+                wait for 18518 ps;
                 clock <= '0';
-                wait for 50 ns;
+                wait for 18519 ps;
         end process;
 
-        reset <= '1', '0' after 100001 ps; 
+        reset <= '1', '0' after 37038 ps; 
+
+        uart_rx <= '1';
         
-		SCP0 : single_cycle_processor
+		SCP : single_cycle_processor
 			port map (
 				clk => clock,
 				rst => reset,
-                uart_rx_bit => uart_1,
-                gpio_data => gpio_data_0,
-                output => output_0,
-                uart_tx_bit => uart_0);
-        
-		SCP1 : single_cycle_processor
-			port map (
-				clk => clock,
-				rst => reset,
-                uart_rx_bit => uart_0,
-                gpio_data => gpio_data_1,
-                output => output_1,
-                uart_tx_bit => uart_1);
-        
-        gpio_data_0 <= "Z0", "Z1" after 543241 ps,
-        "Z0" after 6423342 ps, "Z1" after 23565386 ps; 
-        gpio_data_1 <= "Z0", "Z1" after 543241 ps,
-        "Z0" after 6423342 ps, "Z1" after 23565386 ps; 
+                uart_rx_bit => uart_rx,
+                gpio_data => gpio_data,
+                output => output,
+                uart_tx_bit => uart_tx);
 end architecture;

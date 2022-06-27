@@ -19,7 +19,7 @@ entity single_cycle_processor is
         rst : in std_logic;
         uart_rx_bit : in std_logic;
         gpio_data : inout std_logic_vector(1 downto 0);
-        output : out std_logic_vector(31 downto 0);
+        output : out std_logic_vector(7 downto 0);
         uart_tx_bit : out std_logic);
 end entity;
 
@@ -64,6 +64,8 @@ single_cycle_processor is
     signal w_mode : std_logic_vector(1 downto 0);
     signal w_silver : std_logic_vector(1 downto 0);
     
+    signal dummy : std_logic_vector(23 downto 0);
+
     begin
         SCC : single_cycle_controller
             port map(
@@ -88,7 +90,7 @@ single_cycle_processor is
                 FIRST_INSTRUCTION => 48,
                 MEMD_NUMBER_OF_WORDS => 128,
                 MEMI_NUMBER_OF_WORDS => 128,
-                OUTPUT_ADDR => 255)
+                OUTPUT_ADDR => 128)
             port map(
                 alu_selector => w_alu_selector,
                 arith => w_arith,
@@ -120,16 +122,17 @@ single_cycle_processor is
                 er_2_output => w_er_2_output,
                 er_3_output => w_er_3_output,
                 instruction => w_instruction,
-                output => output);
+                output(7 downto 0) => output,
+                output(31 downto 8) => dummy);
 
         TIM : timer
             generic map(
                 DATA_LENGTH => 32)
             port map(
                 clk => clk,
-                clk_division => X"00000014",
+                clk_division => X"0000000C",
                 count => '1',
-                max_count => X"00000008",
+                max_count => X"00000001",
                 rst => rst,
                 set => w_er_0_flag,
                 value_count => w_er_0_input,
@@ -203,6 +206,6 @@ single_cycle_processor is
          
         w_er_2_en <= not(bool2sl(w_gold(0) = w_silver(0)));
         w_er_3_en <= not(bool2sl(w_gold(1) = w_silver(1)));
-        w_mode <= "10";
+        w_mode <= "11";
         w_silver <= (w_er_3_input & w_er_2_input) or w_mode; 
 end architecture;
