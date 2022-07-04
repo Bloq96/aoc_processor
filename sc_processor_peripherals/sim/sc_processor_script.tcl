@@ -82,9 +82,9 @@ if {[file isdirectory sim]} {
     add wave /SCP/w_tx_byte
     add wave /SCP/w_valid_byte
     add wave /SCP/w_next_byte
-    add wave -radix decimal /SCP/W2B/UC/w_value
-    add wave -radix decimal /SCP/TX/BC/w_value
-    add wave -radix decimal /SCP/TX/CC/w_value
+    add wave -radix unsigned /SCP/W2B/UC/w_value
+    add wave -radix unsigned /SCP/TX/BC/w_value
+    add wave -radix unsigned /SCP/TX/CC/w_value
     add wave /SCP/w_er_2_en
     add wave /SCP/w_er_2_input
     add wave /SCP/SCD/er_2_output
