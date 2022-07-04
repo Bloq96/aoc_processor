@@ -130,9 +130,9 @@ single_cycle_processor is
                 DATA_LENGTH => 32)
             port map(
                 clk => clk,
-                clk_division => X"0000000C",
+                clk_division => X"0000000B",
                 count => '1',
-                max_count => X"00000001",
+                max_count => X"0000000B",
                 rst => rst,
                 set => w_er_0_flag,
                 value_count => w_er_0_input,

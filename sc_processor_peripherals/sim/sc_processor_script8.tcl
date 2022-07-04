@@ -77,21 +77,7 @@ if {[file isdirectory sim]} {
     add wave -radix decimal /SCP/SCD/er_0_output
     add wave -radix decimal /SCP/TIM/CNTx/w_value
     add wave -radix decimal /SCP/TIM/DIVx/w_value
-    add wave /SCP/w_er_1_flag
-    add wave -radix decimal /SCP/SCD/er_1_output
-    add wave /SCP/w_tx_byte
-    add wave /SCP/w_valid_byte
-    add wave /SCP/w_next_byte
-    add wave -radix decimal /SCP/W2B/UC/w_value
-    add wave -radix decimal /SCP/TX/BC/w_value
-    add wave -radix decimal /SCP/TX/CC/w_value
-    add wave /SCP/w_er_2_en
-    add wave /SCP/w_er_2_input
-    add wave /SCP/SCD/er_2_output
-    add wave /SCP/w_er_3_en
-    add wave /SCP/w_er_3_input
-    add wave /SCP/SCD/er_3_output
 	view structure
 	view signals
-	run 50 us
+	run 8 us
 }
